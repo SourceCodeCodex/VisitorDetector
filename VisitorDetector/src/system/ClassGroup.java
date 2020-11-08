@@ -24,24 +24,24 @@ public class ClassGroup implements IRelationBuilder<MClass, MSystem> {
 		Group<MClass> systemClasses = new Group<>();
 		try {
 			List<IType> classes = getClasses(arg0);
-			for(IType i:classes) {
+			for (IType i : classes) {
 				MClass c = Factory.getInstance().createMClass(i);
 				systemClasses.add(c);
 			}
-			
+
 		} catch (JavaModelException e) {
 			System.err.println("MClass - MSystem:" + e.getMessage());
 		}
 		return systemClasses;
 	}
-	
+
 	private List<IType> getClasses(MSystem arg0) throws JavaModelException {
 		List<IType> classes = new LinkedList<>();
-		for(IPackageFragment i:arg0.getUnderlyingObject().getPackageFragments()) {
-			for(IJavaElement j: i.getChildren()) {
-				if(j.getElementType() == IJavaElement.COMPILATION_UNIT) {
-					IType[] types = ((ICompilationUnit)j).getAllTypes();
-					for(IType type:types) {
+		for (IPackageFragment i : arg0.getUnderlyingObject().getPackageFragments()) {
+			for (IJavaElement j : i.getChildren()) {
+				if (j.getElementType() == IJavaElement.COMPILATION_UNIT) {
+					IType[] types = ((ICompilationUnit) j).getAllTypes();
+					for (IType type : types) {
 						classes.add(type);
 					}
 				}

@@ -15,14 +15,14 @@ import visitordetector.metamodel.entity.MClass;
 import visitordetector.metamodel.factory.Factory;
 
 @RelationBuilder
-public class SuperGroup implements IRelationBuilder<MClass,MClass> {
+public class SuperGroup implements IRelationBuilder<MClass, MClass> {
 
 	@Override
 	public Group<MClass> buildGroup(MClass arg0) {
 		Group<MClass> types = new Group<>();
 		try {
 			List<IType> supertypes = this.getSupertypes(arg0);
-			for(IType type:supertypes) {
+			for (IType type : supertypes) {
 				MClass supertype = Factory.getInstance().createMClass(type);
 				types.add(supertype);
 			}
@@ -31,13 +31,14 @@ public class SuperGroup implements IRelationBuilder<MClass,MClass> {
 		}
 		return types;
 	}
-	
+
 	public List<IType> getSupertypes(MClass arg0) throws JavaModelException {
 		List<IType> types = new LinkedList<>();
 		ITypeHierarchy hierarchy = arg0.getUnderlyingObject().newSupertypeHierarchy(new NullProgressMonitor());
 		IType[] supertypes = hierarchy.getAllSupertypes(arg0.getUnderlyingObject());
-		for(IType i:supertypes) {
-			types.add(i);
+		for (IType i : supertypes) {
+			if (!i.isBinary())
+				types.add(i);
 		}
 		return types;
 	}

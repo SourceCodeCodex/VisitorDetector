@@ -6,10 +6,22 @@ public interface MClass extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.Integer noOfCasts();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Integer noOfDescendantsCasts();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MClass> subGroup();
+
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MMethod> methodsWithCasts();
+
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MMethod> methodGroup();
+
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MMethod> methodsWithDescendantsCasts();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MClass> superGroup();
