@@ -22,7 +22,7 @@ public class MethodsWithDescendantsCasts implements IRelationBuilder<MMethod, MC
 		List<MMethod> methodsWithoutDuplicates = new LinkedList<>();
 		for (MClass descendent : descendants) {
 			try {
-				this.removeDuplicates(descendent.methodsWithCasts().getElements(), methodsWithoutDuplicates);
+				methodsWithoutDuplicates = this.removeDuplicates(descendent.methodsWithCasts().getElements(), methodsWithoutDuplicates);
 			} catch (JavaModelException e) {
 				System.err.println("MMethod - MClass -> MethodsWithDescendantsCasts:" + e.getMessage());
 			}
@@ -33,8 +33,9 @@ public class MethodsWithDescendantsCasts implements IRelationBuilder<MMethod, MC
 
 	private List<MMethod> removeDuplicates(List<MMethod> methodsWithDuplicates, List<MMethod> methodsWithoutDuplicates)
 			throws JavaModelException {
-		boolean found = false;
+		boolean found;
 		for (MMethod methodOne : methodsWithDuplicates) {
+			found = false;
 			for (MMethod methodTwo : methodsWithoutDuplicates) {
 				if (compareMethods(methodOne, methodTwo)) {
 					found = true;

@@ -15,20 +15,19 @@ public class NoOfCodeLines implements IPropertyComputer<Long, MSystem> {
 	@Override
 	public Long compute(MSystem arg0) {
 		try {
-			return getClasses(arg0);
+			return getNoOfCodeLines(arg0);
 		} catch (JavaModelException e) {
 			System.err.println("NoOfCodeLines:" + e.getMessage());
 		}
 		return (long) 0;
 	}
 
-	private long getClasses(MSystem arg0) throws JavaModelException {
+	private long getNoOfCodeLines(MSystem arg0) throws JavaModelException {
 		long nr = 0;
 		for (IPackageFragment i : arg0.getUnderlyingObject().getPackageFragments()) {
 			for (IJavaElement j : i.getChildren()) {
 				if (j.getElementType() == IJavaElement.COMPILATION_UNIT) {
 					ICompilationUnit k = (ICompilationUnit) j;
-					System.out.println(this.countLines(k.getSource()));
 					nr += this.countLines(k.getSource());
 				}
 			}

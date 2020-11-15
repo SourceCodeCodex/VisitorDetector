@@ -64,8 +64,8 @@ public class MethodsWithCasts implements IRelationBuilder<MMethod, MClass> {
 				if (!pMethods.contains(method)) {
 					pMethods.add(method);
 				}
-				System.out.println(arg0.getElement());
-				// System.out.println(method);
+//				System.out.println(arg0.getElement());
+//				System.out.println(method);
 				String path = arg0.getResource().getProjectRelativePath().toOSString();
 				if (!uniqueResources.contains(path)) {
 					uniqueResources.add(path);
@@ -80,7 +80,6 @@ public class MethodsWithCasts implements IRelationBuilder<MMethod, MClass> {
 	}
 
 	private PseudoMethod parseString(String info) {
-		String[] segments = info.split(" ");
 		String name;
 		String temp = info.substring(info.indexOf("{k"));
 		name = getMethodName(temp);
@@ -88,7 +87,7 @@ public class MethodsWithCasts implements IRelationBuilder<MMethod, MClass> {
 		String[] args = temp.split(" ");
 		args = this.replaceComma(args);
 		String containingClass = getClassName(info.substring(info.indexOf("[in")).split(" "));
-		String containingPackage = getPackageName(segments);
+		String containingPackage = getPackageName(info);
 		if (args[0].equals("")) {
 			return new PseudoMethod(name, containingClass, containingPackage, null);
 		}
@@ -141,7 +140,8 @@ public class MethodsWithCasts implements IRelationBuilder<MMethod, MClass> {
 		return temp.substring(0, temp.length() - 1);
 	}
 
-	private String getPackageName(String[] s) {
+	private String getPackageName(String temp) {
+		String[] s = temp.substring(0, temp.lastIndexOf(']')).split(" ");
 		int index = s.length - 5;
 		if (s[index].equals("[in"))
 			index -= 1;

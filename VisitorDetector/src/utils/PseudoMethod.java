@@ -9,10 +9,18 @@ public class PseudoMethod {
 	private String[] parameterTypes;
 
 	public PseudoMethod(String name, String containingClass, String containingPackage, String[] parameterTypes) {
-		this.name = name;
+		this.name = assignName(name, containingClass);
 		this.containingClass = containingClass;
 		this.containingPackage = containingPackage;
 		this.parameterTypes = assignParameterTypes(parameterTypes);
+	}
+
+	private String assignName(String name, String containingClass) {
+		if (name.equals(""))
+			name = containingClass;
+		if (name.contains("$"))
+			return name.substring(name.lastIndexOf('$') + 1);
+		return name;
 	}
 
 	private String[] assignParameterTypes(String[] parameterTypes) {
@@ -49,7 +57,7 @@ public class PseudoMethod {
 	public boolean verifyClass(String fullyQualifiedName) {
 		String full;
 		full = getFullyQualifiedName();
-		// System.out.println(fullyQualifiedName);
+//		 System.out.println(fullyQualifiedName);
 		// System.out.println(full);
 		return full.equals(fullyQualifiedName);
 	}
@@ -61,18 +69,19 @@ public class PseudoMethod {
 	}
 
 	public boolean verifyMethod(IMethod method) {
+//		System.out.println(method.getElementName() + " - " + name);
 		if (!verifyName(method)) {
 			return false;
 		}
-		System.out.println("NAME Passed!" + method.getElementName());
-		System.out.println(method.getParameterTypes().length + "-" + this.parameterTypes.length);
+//		System.out.println("NAME Passed!" + method.getElementName());
+//		System.out.println(method.getParameterTypes().length + "-" + this.parameterTypes.length);
 		if (!verifyNoOfParams(method))
 			return false;
 		String[] types = method.getParameterTypes();
-		for (String type : types) {
-			System.out.print(type + " ");
-		}
-		System.out.println();
+//		for (String type : types) {
+//			System.out.print(type + " ");
+//		}
+//		System.out.println();
 		return verifyParams(types);
 	}
 

@@ -1,9 +1,11 @@
-package utils;
+
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import utils.PseudoMethod;
 
 public class TestTransform {
 	private static PseudoMethod ps;

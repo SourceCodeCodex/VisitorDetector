@@ -46,13 +46,13 @@ public class VisitorDetectorTests {
 	@Test
 	public void testNoOfCastsOne() {
 		int noOfCasts = getType(types, "Test1").noOfCasts();
-		Assert.assertEquals(10, noOfCasts);
+		Assert.assertEquals(12, noOfCasts);
 	}
 
 	@Test
 	public void testNoOfDescendantCasts() {
 		int noOfCasts = getType(types, "OriginalTest").noOfDescendantsCasts();
-		Assert.assertEquals(11, noOfCasts);
+		Assert.assertEquals(13, noOfCasts);
 	}
 
 	@Test
@@ -76,13 +76,13 @@ public class VisitorDetectorTests {
 	@Test
 	public void testMethodsWithCastsForAType() {
 		MClass type = getType(types, "Test1");
-		Assert.assertEquals(7, type.methodsWithCasts().getElements().size());
+		Assert.assertEquals(9, type.methodsWithCasts().getElements().size());
 	}
 
 	@Test
 	public void testMethodsWithDescendantsCastsForAType() {
 		MClass type = getType(types, "OriginalTest");
-		Assert.assertEquals(7, type.methodsWithDescendantsCasts().getElements().size());
+		Assert.assertEquals(9, type.methodsWithDescendantsCasts().getElements().size());
 	}
 
 	@Test
