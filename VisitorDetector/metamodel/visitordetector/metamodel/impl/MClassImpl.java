@@ -1,6 +1,8 @@
 package visitordetector.metamodel.impl;
 
 import visitordetector.metamodel.entity.*;
+import classes.NoOfClientsDoingCasts;
+import classes.NoOfClientsDoingDescendantsCasts;
 import classes.NoOfCasts;
 import classes.NoOfDescendantsCasts;
 import classes.ToString;
@@ -15,6 +17,8 @@ public class MClassImpl implements MClass {
 
 	private org.eclipse.jdt.core.IType underlyingObj_;
 
+	private static final NoOfClientsDoingCasts NoOfClientsDoingCasts_INSTANCE = new NoOfClientsDoingCasts();
+	private static final NoOfClientsDoingDescendantsCasts NoOfClientsDoingDescendantsCasts_INSTANCE = new NoOfClientsDoingDescendantsCasts();
 	private static final NoOfCasts NoOfCasts_INSTANCE = new NoOfCasts();
 	private static final NoOfDescendantsCasts NoOfDescendantsCasts_INSTANCE = new NoOfDescendantsCasts();
 	private static final ToString ToString_INSTANCE = new ToString();
@@ -32,6 +36,18 @@ public class MClassImpl implements MClass {
 	@Override
 	public org.eclipse.jdt.core.IType getUnderlyingObject() {
 		return underlyingObj_;
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Integer noOfClientsDoingCasts() {
+		return NoOfClientsDoingCasts_INSTANCE.compute(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Integer noOfClientsDoingDescendantsCasts() {
+		return NoOfClientsDoingDescendantsCasts_INSTANCE.compute(this);
 	}
 
 	@Override

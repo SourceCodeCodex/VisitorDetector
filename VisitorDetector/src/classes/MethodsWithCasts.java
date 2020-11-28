@@ -61,10 +61,10 @@ public class MethodsWithCasts implements IRelationBuilder<MMethod, MClass> {
 			@Override
 			public void acceptSearchMatch(SearchMatch arg0) throws CoreException {
 				PseudoMethod method = parseString(arg0.getElement().toString());
+//				System.out.println(arg0.getElement());
 				if (!pMethods.contains(method)) {
 					pMethods.add(method);
 				}
-//				System.out.println(arg0.getElement());
 //				System.out.println(method);
 				String path = arg0.getResource().getProjectRelativePath().toOSString();
 				if (!uniqueResources.contains(path)) {
@@ -81,7 +81,7 @@ public class MethodsWithCasts implements IRelationBuilder<MMethod, MClass> {
 
 	private PseudoMethod parseString(String info) {
 		String name;
-		String temp = info.substring(info.indexOf("{k"));
+		String temp = info.substring(info.indexOf("{key"));
 		name = getMethodName(temp);
 		temp = info.substring(info.indexOf('(') + 1, info.indexOf(')'));
 		String[] args = temp.split(" ");
@@ -137,6 +137,13 @@ public class MethodsWithCasts implements IRelationBuilder<MMethod, MClass> {
 			temp = s[index] + "$" + temp;
 			index = index + 2;
 		}
+//		if(temp.contains("<")) {
+//			index = s.length - 1;
+//			while(!s[index].contains(".java")) {
+//				index--;
+//			}
+//			return s[index].substring(0, s[index].indexOf('.'));
+//		}
 		return temp.substring(0, temp.length() - 1);
 	}
 

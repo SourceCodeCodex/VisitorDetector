@@ -89,5 +89,11 @@ public class VisitorDetectorTests {
 	public void testNoOfTypesWithAtLeastTwoDescendantsCasts() {
 		Assert.assertEquals(2, project.classGroupWithAtLeastTwoDescendantsCasts().getElements().size());
 	}
+	
+	@Test
+	public void testNoOfClientsDoingCasts() {
+		MClass type = getType(types, "Test1");
+		Assert.assertEquals(5, type.noOfClientsDoingCasts().intValue());
+	}
 
 }

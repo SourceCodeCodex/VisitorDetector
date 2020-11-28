@@ -3,6 +3,12 @@ package visitordetector.metamodel.entity;
 public interface MClass extends ro.lrg.xcore.metametamodel.XEntity {
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Integer noOfClientsDoingCasts();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Integer noOfClientsDoingDescendantsCasts();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.Integer noOfCasts();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
