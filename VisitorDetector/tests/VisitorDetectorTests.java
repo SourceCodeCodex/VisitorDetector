@@ -95,5 +95,17 @@ public class VisitorDetectorTests {
 		MClass type = getType(types, "Test1");
 		Assert.assertEquals(5, type.noOfClientsDoingCasts().intValue());
 	}
+	
+	@Test
+	public void testNoOfClientsDoingDescendantsCasts() {
+		MClass type = getType(types, "OriginalTest");
+		Assert.assertEquals(5, type.noOfClientsDoingDescendantsCasts().intValue());
+	}
+	
+	@Test
+	public void testAverageOfDescendantsCastsForAClient() {
+		MClass type = getType(types, "OriginalTest");
+		Assert.assertEquals(new Double(1.0), type.averageOfDescendantsCastsForAClient());
+	}
 
 }

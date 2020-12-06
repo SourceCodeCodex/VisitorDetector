@@ -4,6 +4,7 @@ import visitordetector.metamodel.entity.*;
 import classes.NoOfClientsDoingCasts;
 import classes.NoOfClientsDoingDescendantsCasts;
 import classes.NoOfCasts;
+import classes.AverageOfDescendantsCastsForAClient;
 import classes.NoOfDescendantsCasts;
 import classes.ToString;
 import classes.SubGroup;
@@ -20,6 +21,7 @@ public class MClassImpl implements MClass {
 	private static final NoOfClientsDoingCasts NoOfClientsDoingCasts_INSTANCE = new NoOfClientsDoingCasts();
 	private static final NoOfClientsDoingDescendantsCasts NoOfClientsDoingDescendantsCasts_INSTANCE = new NoOfClientsDoingDescendantsCasts();
 	private static final NoOfCasts NoOfCasts_INSTANCE = new NoOfCasts();
+	private static final AverageOfDescendantsCastsForAClient AverageOfDescendantsCastsForAClient_INSTANCE = new AverageOfDescendantsCastsForAClient();
 	private static final NoOfDescendantsCasts NoOfDescendantsCasts_INSTANCE = new NoOfDescendantsCasts();
 	private static final ToString ToString_INSTANCE = new ToString();
 	private static final SubGroup SubGroup_INSTANCE = new SubGroup();
@@ -54,6 +56,12 @@ public class MClassImpl implements MClass {
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.Integer noOfCasts() {
 		return NoOfCasts_INSTANCE.compute(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double averageOfDescendantsCastsForAClient() {
+		return AverageOfDescendantsCastsForAClient_INSTANCE.compute(this);
 	}
 
 	@Override

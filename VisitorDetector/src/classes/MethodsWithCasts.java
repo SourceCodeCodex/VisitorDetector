@@ -31,10 +31,11 @@ import visitordetector.metamodel.factory.Factory;
 
 @RelationBuilder
 public class MethodsWithCasts implements IRelationBuilder<MMethod, MClass> {
-	private List<PseudoMethod> pMethods = new LinkedList<>();
+	private List<PseudoMethod> pMethods;
 
 	@Override
 	public Group<MMethod> buildGroup(MClass arg0) {
+		pMethods = new LinkedList<>();
 		Group<MMethod> foundMethods = new Group<>();
 		try {
 			List<SearchMatch> matches = this.getMatches(arg0);

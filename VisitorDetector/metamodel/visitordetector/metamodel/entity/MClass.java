@@ -12,6 +12,9 @@ public interface MClass extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.Integer noOfCasts();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double averageOfDescendantsCastsForAClient();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.Integer noOfDescendantsCasts();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
