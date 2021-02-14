@@ -17,7 +17,7 @@ import ro.lrg.xcore.metametamodel.PropertyComputer;
 import visitordetector.metamodel.entity.MClass;
 
 @PropertyComputer
-public class NoOfCasts implements IPropertyComputer<Integer, MClass> {
+public class NoOfCastsToMe implements IPropertyComputer<Integer, MClass> {
 
 	@Override
 	public Integer compute(MClass arg0) {

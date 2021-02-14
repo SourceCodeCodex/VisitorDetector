@@ -3,37 +3,52 @@ package visitordetector.metamodel.entity;
 public interface MClass extends ro.lrg.xcore.metametamodel.XEntity {
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Integer noOfClientsDoingCasts();
+	public java.lang.Integer noOfDistinctClientsDoingCastsToMe();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Integer noOfClientsDoingDescendantsCasts();
+	public java.lang.Integer sumOfCastsToEachOfMyDescendants();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Integer noOfCasts();
+	public java.lang.Integer noOfCastsToMe();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double averageOfDescendantsCastsForAClient();
+	public java.lang.Double averageOfDistinctClientsDoingCastsToMyDescendants2();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Integer noOfDescendantsCasts();
+	public java.lang.Integer noOfDistinctClientsDoingCastsToEachOfMyDescendants();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString();
 
-	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> subGroup();
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double averageCastsToEachOfMyDescendants();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double averageOfDistinctClientsDoingCastsToMyDescendants();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MMethod> methodsWithCasts();
+	public ro.lrg.xcore.metametamodel.Group<MMethod> distinctMethodsWithCastsToMe();
+
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MMethod> myClients2();
+
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MClass> ascendantsGroup();
+
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MClass> descendantsGroup();
+
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MMethod> myDescendantsClients();
+
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MMethod> distinctMethodsWithCastsToMyDescendants();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MMethod> methodGroup();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MMethod> methodsWithDescendantsCasts();
-
-	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> superGroup();
+	public ro.lrg.xcore.metametamodel.Group<MMethod> myClients();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAnAction(numParams = 0) 
 	public void showInEditor ();

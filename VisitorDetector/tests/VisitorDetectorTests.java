@@ -44,27 +44,27 @@ public class VisitorDetectorTests {
 	}
 
 	@Test
-	public void testNoOfCastsOne() {
-		int noOfCasts = getType(types, "Test1").noOfCasts();
-		Assert.assertEquals(12, noOfCasts);
+	public void testNoOfCastsToMe() {
+		int noOfCasts = getType(types, "Test1").noOfCastsToMe();
+		Assert.assertEquals(14, noOfCasts);
 	}
 
 	@Test
-	public void testNoOfDescendantCasts() {
-		int noOfCasts = getType(types, "OriginalTest").noOfDescendantsCasts();
-		Assert.assertEquals(13, noOfCasts);
+	public void testSumOfCastsToEachOfMyDescendants() {
+		int noOfCasts = getType(types, "OriginalTest").sumOfCastsToEachOfMyDescendants();
+		Assert.assertEquals(18, noOfCasts);
 	}
 
 	@Test
-	public void testSupertypesOfAType() {
+	public void testAscendants() {
 		MClass type = getType(types, "Test1");
-		Assert.assertEquals(1, type.superGroup().getElements().size());
+		Assert.assertEquals(1, type.ascendantsGroup().getElements().size());
 	}
 
 	@Test
-	public void testSubtypesOfAType() {
+	public void testDescendants() {
 		MClass type = getType(types, "Test1");
-		Assert.assertEquals(2, type.subGroup().getElements().size());
+		Assert.assertEquals(2, type.descendantsGroup().getElements().size());
 	}
 
 	@Test
@@ -74,38 +74,62 @@ public class VisitorDetectorTests {
 	}
 
 	@Test
-	public void testMethodsWithCastsForAType() {
+	public void testdistinctMethodsWithCastsToMe() {
 		MClass type = getType(types, "Test1");
-		Assert.assertEquals(9, type.methodsWithCasts().getElements().size());
+		Assert.assertEquals(11, type.distinctMethodsWithCastsToMe().getElements().size());
 	}
 
 	@Test
-	public void testMethodsWithDescendantsCastsForAType() {
+	public void testdistinctMethodsWithCastsToMyDescendants() {
 		MClass type = getType(types, "OriginalTest");
-		Assert.assertEquals(9, type.methodsWithDescendantsCasts().getElements().size());
+		Assert.assertEquals(12, type.distinctMethodsWithCastsToMyDescendants().getElements().size());
 	}
 
 	@Test
 	public void testNoOfTypesWithAtLeastTwoDescendantsCasts() {
-		Assert.assertEquals(2, project.classGroupWithAtLeastTwoDescendantsCasts().getElements().size());
-	}
-	
-	@Test
-	public void testNoOfClientsDoingCasts() {
-		MClass type = getType(types, "Test1");
-		Assert.assertEquals(5, type.noOfClientsDoingCasts().intValue());
-	}
-	
-	@Test
-	public void testNoOfClientsDoingDescendantsCasts() {
-		MClass type = getType(types, "OriginalTest");
-		Assert.assertEquals(5, type.noOfClientsDoingDescendantsCasts().intValue());
-	}
-	
-	@Test
-	public void testAverageOfDescendantsCastsForAClient() {
-		MClass type = getType(types, "OriginalTest");
-		Assert.assertEquals(new Double(1.0), type.averageOfDescendantsCastsForAClient());
+		Assert.assertEquals(3, project.classGroupWithAtLeastTwoCastsToTheirDescendants().getElements().size());
 	}
 
+	@Test
+	public void testNoOfDistinctClientsDoingCastsToMe() {
+		MClass type = getType(types, "Test1");
+		Assert.assertEquals(11, type.noOfDistinctClientsDoingCastsToMe().intValue());
+	}
+
+	@Test
+	public void testNoOfDistinctClientsDoingCastsToEachOfMyDescendants() {
+		MClass type = getType(types, "OriginalTest");
+		Assert.assertEquals(12, type.noOfDistinctClientsDoingCastsToEachOfMyDescendants().intValue());
+	}
+
+	@Test
+	public void testAverageOfDistinctClietnsDoingCastsToMyDescendants() {
+		MClass type = getType(types, "Test1");
+		Assert.assertEquals(new Double(0.0), type.averageOfDistinctClientsDoingCastsToMyDescendants());
+	}
+	
+	@Test
+	public void testAverageOfDistinctClietnsDoingCastsToMyDescendants2() {
+		MClass type = getType(types, "Test1");
+		Assert.assertEquals(new Double(0.0), type.averageOfDistinctClientsDoingCastsToMyDescendants());
+	}
+
+	@Test
+	public void testAverageCastsToEachOfMyDescendants() {
+		MClass type = getType(types, "OriginalTest");
+		Assert.assertEquals(new Double(3.0), type.averageCastsToEachOfMyDescendants());
+	}
+
+	@Test
+	public void testClientsOfAType() {
+		MClass type = getType(types, "Test1");
+		Assert.assertEquals(33, type.myClients().getElements().size());
+	}
+	
+	@Test
+	public void testClientsOfAType2() {
+		MClass type = getType(types, "Test1");
+		Assert.assertEquals(14, type.myClients2().getElements().size());
+		
+	}
 }

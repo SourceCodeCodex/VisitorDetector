@@ -15,7 +15,7 @@ import visitordetector.metamodel.entity.MClass;
 import visitordetector.metamodel.factory.Factory;
 
 @RelationBuilder
-public class SuperGroup implements IRelationBuilder<MClass, MClass> {
+public class AscendantsGroup implements IRelationBuilder<MClass, MClass> {
 
 	@Override
 	public Group<MClass> buildGroup(MClass arg0) {

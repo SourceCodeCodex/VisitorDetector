@@ -1,34 +1,44 @@
 package visitordetector.metamodel.impl;
 
 import visitordetector.metamodel.entity.*;
-import classes.NoOfClientsDoingCasts;
-import classes.NoOfClientsDoingDescendantsCasts;
-import classes.NoOfCasts;
-import classes.AverageOfDescendantsCastsForAClient;
-import classes.NoOfDescendantsCasts;
+import classes.NoOfDistinctClientsDoingCastsToMe;
+import classes.SumOfCastsToEachOfMyDescendants;
+import classes.NoOfCastsToMe;
+import classes.AverageOfDistinctClientsDoingCastsToMyDescendants2;
+import classes.NoOfDistinctClientsDoingCastsToEachOfMyDescendants;
 import classes.ToString;
-import classes.SubGroup;
-import classes.MethodsWithCasts;
+import classes.AverageCastsToEachOfMyDescendants;
+import classes.AverageOfDistinctClientsDoingCastsToMyDescendants;
+import classes.DistinctMethodsWithCastsToMe;
+import classes.MyClients2;
+import classes.AscendantsGroup;
+import classes.DescendantsGroup;
+import classes.MyDescendantsClients;
+import classes.DistinctMethodsWithCastsToMyDescendants;
 import classes.MethodGroup;
-import classes.MethodsWithDescendantsCasts;
-import classes.SuperGroup;
+import classes.MyClients;
 import classes.ShowInEditor;
 
 public class MClassImpl implements MClass {
 
 	private org.eclipse.jdt.core.IType underlyingObj_;
 
-	private static final NoOfClientsDoingCasts NoOfClientsDoingCasts_INSTANCE = new NoOfClientsDoingCasts();
-	private static final NoOfClientsDoingDescendantsCasts NoOfClientsDoingDescendantsCasts_INSTANCE = new NoOfClientsDoingDescendantsCasts();
-	private static final NoOfCasts NoOfCasts_INSTANCE = new NoOfCasts();
-	private static final AverageOfDescendantsCastsForAClient AverageOfDescendantsCastsForAClient_INSTANCE = new AverageOfDescendantsCastsForAClient();
-	private static final NoOfDescendantsCasts NoOfDescendantsCasts_INSTANCE = new NoOfDescendantsCasts();
+	private static final NoOfDistinctClientsDoingCastsToMe NoOfDistinctClientsDoingCastsToMe_INSTANCE = new NoOfDistinctClientsDoingCastsToMe();
+	private static final SumOfCastsToEachOfMyDescendants SumOfCastsToEachOfMyDescendants_INSTANCE = new SumOfCastsToEachOfMyDescendants();
+	private static final NoOfCastsToMe NoOfCastsToMe_INSTANCE = new NoOfCastsToMe();
+	private static final AverageOfDistinctClientsDoingCastsToMyDescendants2 AverageOfDistinctClientsDoingCastsToMyDescendants2_INSTANCE = new AverageOfDistinctClientsDoingCastsToMyDescendants2();
+	private static final NoOfDistinctClientsDoingCastsToEachOfMyDescendants NoOfDistinctClientsDoingCastsToEachOfMyDescendants_INSTANCE = new NoOfDistinctClientsDoingCastsToEachOfMyDescendants();
 	private static final ToString ToString_INSTANCE = new ToString();
-	private static final SubGroup SubGroup_INSTANCE = new SubGroup();
-	private static final MethodsWithCasts MethodsWithCasts_INSTANCE = new MethodsWithCasts();
+	private static final AverageCastsToEachOfMyDescendants AverageCastsToEachOfMyDescendants_INSTANCE = new AverageCastsToEachOfMyDescendants();
+	private static final AverageOfDistinctClientsDoingCastsToMyDescendants AverageOfDistinctClientsDoingCastsToMyDescendants_INSTANCE = new AverageOfDistinctClientsDoingCastsToMyDescendants();
+	private static final DistinctMethodsWithCastsToMe DistinctMethodsWithCastsToMe_INSTANCE = new DistinctMethodsWithCastsToMe();
+	private static final MyClients2 MyClients2_INSTANCE = new MyClients2();
+	private static final AscendantsGroup AscendantsGroup_INSTANCE = new AscendantsGroup();
+	private static final DescendantsGroup DescendantsGroup_INSTANCE = new DescendantsGroup();
+	private static final MyDescendantsClients MyDescendantsClients_INSTANCE = new MyDescendantsClients();
+	private static final DistinctMethodsWithCastsToMyDescendants DistinctMethodsWithCastsToMyDescendants_INSTANCE = new DistinctMethodsWithCastsToMyDescendants();
 	private static final MethodGroup MethodGroup_INSTANCE = new MethodGroup();
-	private static final MethodsWithDescendantsCasts MethodsWithDescendantsCasts_INSTANCE = new MethodsWithDescendantsCasts();
-	private static final SuperGroup SuperGroup_INSTANCE = new SuperGroup();
+	private static final MyClients MyClients_INSTANCE = new MyClients();
 	private static final ShowInEditor ShowInEditor_INSTANCE = new ShowInEditor();
 
 	public MClassImpl(org.eclipse.jdt.core.IType underlyingObj) {
@@ -42,32 +52,32 @@ public class MClassImpl implements MClass {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Integer noOfClientsDoingCasts() {
-		return NoOfClientsDoingCasts_INSTANCE.compute(this);
+	public java.lang.Integer noOfDistinctClientsDoingCastsToMe() {
+		return NoOfDistinctClientsDoingCastsToMe_INSTANCE.compute(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Integer noOfClientsDoingDescendantsCasts() {
-		return NoOfClientsDoingDescendantsCasts_INSTANCE.compute(this);
+	public java.lang.Integer sumOfCastsToEachOfMyDescendants() {
+		return SumOfCastsToEachOfMyDescendants_INSTANCE.compute(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Integer noOfCasts() {
-		return NoOfCasts_INSTANCE.compute(this);
+	public java.lang.Integer noOfCastsToMe() {
+		return NoOfCastsToMe_INSTANCE.compute(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double averageOfDescendantsCastsForAClient() {
-		return AverageOfDescendantsCastsForAClient_INSTANCE.compute(this);
+	public java.lang.Double averageOfDistinctClientsDoingCastsToMyDescendants2() {
+		return AverageOfDistinctClientsDoingCastsToMyDescendants2_INSTANCE.compute(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Integer noOfDescendantsCasts() {
-		return NoOfDescendantsCasts_INSTANCE.compute(this);
+	public java.lang.Integer noOfDistinctClientsDoingCastsToEachOfMyDescendants() {
+		return NoOfDistinctClientsDoingCastsToEachOfMyDescendants_INSTANCE.compute(this);
 	}
 
 	@Override
@@ -77,15 +87,51 @@ public class MClassImpl implements MClass {
 	}
 
 	@Override
-	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> subGroup() {
-		return SubGroup_INSTANCE.buildGroup(this);
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double averageCastsToEachOfMyDescendants() {
+		return AverageCastsToEachOfMyDescendants_INSTANCE.compute(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double averageOfDistinctClientsDoingCastsToMyDescendants() {
+		return AverageOfDistinctClientsDoingCastsToMyDescendants_INSTANCE.compute(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MMethod> methodsWithCasts() {
-		return MethodsWithCasts_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MMethod> distinctMethodsWithCastsToMe() {
+		return DistinctMethodsWithCastsToMe_INSTANCE.buildGroup(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MMethod> myClients2() {
+		return MyClients2_INSTANCE.buildGroup(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MClass> ascendantsGroup() {
+		return AscendantsGroup_INSTANCE.buildGroup(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MClass> descendantsGroup() {
+		return DescendantsGroup_INSTANCE.buildGroup(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MMethod> myDescendantsClients() {
+		return MyDescendantsClients_INSTANCE.buildGroup(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MMethod> distinctMethodsWithCastsToMyDescendants() {
+		return DistinctMethodsWithCastsToMyDescendants_INSTANCE.buildGroup(this);
 	}
 
 	@Override
@@ -96,14 +142,8 @@ public class MClassImpl implements MClass {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MMethod> methodsWithDescendantsCasts() {
-		return MethodsWithDescendantsCasts_INSTANCE.buildGroup(this);
-	}
-
-	@Override
-	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> superGroup() {
-		return SuperGroup_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MMethod> myClients() {
+		return MyClients_INSTANCE.buildGroup(this);
 	}
 
 	@Override

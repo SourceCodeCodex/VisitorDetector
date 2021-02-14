@@ -1,7 +1,6 @@
 package classes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,12 +24,13 @@ import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
 import utils.PseudoMethod;
+import utils.StringParser;
 import visitordetector.metamodel.entity.MClass;
 import visitordetector.metamodel.entity.MMethod;
 import visitordetector.metamodel.factory.Factory;
 
 @RelationBuilder
-public class MethodsWithCasts implements IRelationBuilder<MMethod, MClass> {
+public class DistinctMethodsWithCastsToMe implements IRelationBuilder<MMethod, MClass> {
 	private List<PseudoMethod> pMethods;
 
 	@Override
@@ -61,12 +61,10 @@ public class MethodsWithCasts implements IRelationBuilder<MMethod, MClass> {
 
 			@Override
 			public void acceptSearchMatch(SearchMatch arg0) throws CoreException {
-				PseudoMethod method = parseString(arg0.getElement().toString());
-//				System.out.println(arg0.getElement());
+				PseudoMethod method = StringParser.parse(arg0.getElement().toString());
 				if (!pMethods.contains(method)) {
 					pMethods.add(method);
 				}
-//				System.out.println(method);
 				String path = arg0.getResource().getProjectRelativePath().toOSString();
 				if (!uniqueResources.contains(path)) {
 					uniqueResources.add(path);
@@ -78,82 +76,6 @@ public class MethodsWithCasts implements IRelationBuilder<MMethod, MClass> {
 		searchEngine.search(pattern, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
 				requestor, new NullProgressMonitor());
 		return matches;
-	}
-
-	private PseudoMethod parseString(String info) {
-		String name;
-		String temp = info.substring(info.indexOf("{key"));
-		name = getMethodName(temp);
-		temp = info.substring(info.indexOf('(') + 1, info.indexOf(')'));
-		String[] args = temp.split(" ");
-		args = this.replaceComma(args);
-		String containingClass = getClassName(info.substring(info.indexOf("[in")).split(" "));
-		String containingPackage = getPackageName(info);
-		if (args[0].equals("")) {
-			return new PseudoMethod(name, containingClass, containingPackage, null);
-		}
-		return new PseudoMethod(name, containingClass, containingPackage, args);
-	}
-
-	private String getMethodName(String temp) {
-		int pos1 = temp.indexOf('<');
-		int pos0 = temp.indexOf('.') + 1;
-		int pos2 = temp.indexOf('(');
-		if (pos1 != -1 && pos1 < pos2)
-			return temp.substring(pos0, pos1);
-		return temp.substring(pos0, pos2);
-	}
-
-	private String[] replaceComma(String[] args) {
-		String[] temp = new String[args.length];
-		int nr = 0;
-		for (int index = 0; index < args.length; index++) {
-			if (args[index].length() > 1 && args[index].charAt(args[index].length() - 1) == ',')
-				args[index] = args[index].substring(0, args[index].lastIndexOf(','));
-			if (args[index].contains("<") && !args[index].contains(">")) {
-				String aux = args[index];
-				index++;
-				while (!args[index].contains(">")) {
-					aux += " " + args[index];
-					index++;
-				}
-				if (args[index].indexOf(',') == args[index].length() - 1)
-					args[index] = args[index].substring(0, args[index].length() - 1);
-				args[index] = aux + " " + args[index];
-
-			}
-			if (args[index].equals("...")) {
-				temp[nr - 1] += "[]";
-				continue;
-			}
-			temp[nr++] = args[index];
-		}
-		return Arrays.copyOf(temp, nr);
-	}
-
-	private String getClassName(String[] s) {
-		int index = 1;
-		String temp = "";
-		while (!s[index].contains("[") && !s[index].contains(".java")) {
-			temp = s[index] + "$" + temp;
-			index = index + 2;
-		}
-//		if(temp.contains("<")) {
-//			index = s.length - 1;
-//			while(!s[index].contains(".java")) {
-//				index--;
-//			}
-//			return s[index].substring(0, s[index].indexOf('.'));
-//		}
-		return temp.substring(0, temp.length() - 1);
-	}
-
-	private String getPackageName(String temp) {
-		String[] s = temp.substring(0, temp.lastIndexOf(']')).split(" ");
-		int index = s.length - 5;
-		if (s[index].equals("[in"))
-			index -= 1;
-		return s[index];
 	}
 
 	private List<IMethod> getMethods(List<SearchMatch> matches) throws JavaModelException {
@@ -189,5 +111,4 @@ public class MethodsWithCasts implements IRelationBuilder<MMethod, MClass> {
 
 		return methods;
 	}
-
 }

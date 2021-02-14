@@ -4,7 +4,7 @@ import visitordetector.metamodel.entity.*;
 import system.NoOfCodeLines;
 import system.NoOfClasses;
 import system.ToString;
-import system.ClassGroupWithAtLeastTwoDescendantsCasts;
+import system.ClassGroupWithAtLeastTwoCastsToTheirDescendants;
 import system.ClassGroup;
 
 public class MSystemImpl implements MSystem {
@@ -14,7 +14,7 @@ public class MSystemImpl implements MSystem {
 	private static final NoOfCodeLines NoOfCodeLines_INSTANCE = new NoOfCodeLines();
 	private static final NoOfClasses NoOfClasses_INSTANCE = new NoOfClasses();
 	private static final ToString ToString_INSTANCE = new ToString();
-	private static final ClassGroupWithAtLeastTwoDescendantsCasts ClassGroupWithAtLeastTwoDescendantsCasts_INSTANCE = new ClassGroupWithAtLeastTwoDescendantsCasts();
+	private static final ClassGroupWithAtLeastTwoCastsToTheirDescendants ClassGroupWithAtLeastTwoCastsToTheirDescendants_INSTANCE = new ClassGroupWithAtLeastTwoCastsToTheirDescendants();
 	private static final ClassGroup ClassGroup_INSTANCE = new ClassGroup();
 
 	public MSystemImpl(org.eclipse.jdt.core.IJavaProject underlyingObj) {
@@ -46,8 +46,8 @@ public class MSystemImpl implements MSystem {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> classGroupWithAtLeastTwoDescendantsCasts() {
-		return ClassGroupWithAtLeastTwoDescendantsCasts_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MClass> classGroupWithAtLeastTwoCastsToTheirDescendants() {
+		return ClassGroupWithAtLeastTwoCastsToTheirDescendants_INSTANCE.buildGroup(this);
 	}
 
 	@Override

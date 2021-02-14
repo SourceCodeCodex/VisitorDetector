@@ -57,7 +57,7 @@ public class PseudoMethod {
 	public boolean verifyClass(String fullyQualifiedName) {
 		String full;
 		full = getFullyQualifiedName();
-//		 System.out.println(fullyQualifiedName);
+		// System.out.println(fullyQualifiedName);
 		// System.out.println(full);
 		return full.equals(fullyQualifiedName);
 	}
@@ -69,19 +69,20 @@ public class PseudoMethod {
 	}
 
 	public boolean verifyMethod(IMethod method) {
-//		System.out.println(method.getElementName() + " - " + name);
+		// System.out.println(method.getElementName() + " - " + name);
 		if (!verifyName(method)) {
 			return false;
 		}
-//		System.out.println("NAME Passed!" + method.getElementName());
-//		System.out.println(method.getParameterTypes().length + "-" + this.parameterTypes.length);
+		// System.out.println("NAME Passed!" + method.getElementName());
+		// System.out.println(method.getParameterTypes().length + "-" +
+		// this.parameterTypes.length);
 		if (!verifyNoOfParams(method))
 			return false;
 		String[] types = method.getParameterTypes();
-//		for (String type : types) {
-//			System.out.print(type + " ");
-//		}
-//		System.out.println();
+		// for (String type : types) {
+		// System.out.print(type + " ");
+		// }
+		// System.out.println();
 		return verifyParams(types);
 	}
 
@@ -181,7 +182,9 @@ public class PseudoMethod {
 	private String format(String s, String aux) {
 		String temp = s;
 		String sub = "";
-		if (temp.indexOf("-") == 0) {
+		if (temp.indexOf('*') == 0) {
+			temp = "?" + temp.substring(temp.indexOf('*') + 1);
+		} else if (temp.indexOf("-") == 0) {
 			temp = "? super " + transform(temp.substring(temp.indexOf('-') + 1));
 		} else if (temp.indexOf("+") == 0) {
 			temp = "? extends " + transform(temp.substring(temp.indexOf('+') + 1));

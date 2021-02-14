@@ -131,5 +131,13 @@ public class TestTransform {
 		String actual = ps.transform(s);
 		Assert.assertEquals(expected, actual);
 	}
+	
+	@Test
+	public void test16() {
+		String s = "QClass<*>;";
+		String expected = "Class<?>";
+		String actual = ps.transform(s);
+		Assert.assertEquals(expected, actual);
+	}
 
 }

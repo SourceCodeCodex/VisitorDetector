@@ -13,16 +13,17 @@ import visitordetector.metamodel.entity.MClass;
 import visitordetector.metamodel.entity.MMethod;
 
 @RelationBuilder
-public class MethodsWithDescendantsCasts implements IRelationBuilder<MMethod, MClass> {
+public class DistinctMethodsWithCastsToMyDescendants implements IRelationBuilder<MMethod, MClass> {
 
 	@Override
 	public Group<MMethod> buildGroup(MClass arg0) {
 		Group<MMethod> methods = new Group<>();
-		List<MClass> descendants = arg0.subGroup().getElements();
+		List<MClass> descendants = arg0.descendantsGroup().getElements();
 		List<MMethod> methodsWithoutDuplicates = new LinkedList<>();
 		for (MClass descendent : descendants) {
 			try {
-				methodsWithoutDuplicates = this.removeDuplicates(descendent.methodsWithCasts().getElements(), methodsWithoutDuplicates);
+				methodsWithoutDuplicates = this.removeDuplicates(
+						descendent.distinctMethodsWithCastsToMe().getElements(), methodsWithoutDuplicates);
 			} catch (JavaModelException e) {
 				System.err.println("MMethod - MClass -> MethodsWithDescendantsCasts:" + e.getMessage());
 			}
