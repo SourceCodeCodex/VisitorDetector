@@ -2,13 +2,15 @@ package visitordetector.metamodel.impl;
 
 import visitordetector.metamodel.entity.*;
 import classes.NoOfDistinctClientsDoingCastsToMe;
+import classes.MedianOfCastsToEachOfMyDescendants;
 import classes.SumOfCastsToEachOfMyDescendants;
+import classes.ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants;
 import classes.NoOfCastsToMe;
-import classes.AverageOfDistinctClientsDoingCastsToMyDescendants2;
+import classes.MedianOfDistinctClientsDoingCastsToMyDescendants;
+import classes.MedianOfDistinctClientsDoingCastsToMyDescendants2;
 import classes.NoOfDistinctClientsDoingCastsToEachOfMyDescendants;
 import classes.ToString;
-import classes.AverageCastsToEachOfMyDescendants;
-import classes.AverageOfDistinctClientsDoingCastsToMyDescendants;
+import classes.ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2;
 import classes.DistinctMethodsWithCastsToMe;
 import classes.MyClients2;
 import classes.AscendantsGroup;
@@ -24,13 +26,15 @@ public class MClassImpl implements MClass {
 	private org.eclipse.jdt.core.IType underlyingObj_;
 
 	private static final NoOfDistinctClientsDoingCastsToMe NoOfDistinctClientsDoingCastsToMe_INSTANCE = new NoOfDistinctClientsDoingCastsToMe();
+	private static final MedianOfCastsToEachOfMyDescendants MedianOfCastsToEachOfMyDescendants_INSTANCE = new MedianOfCastsToEachOfMyDescendants();
 	private static final SumOfCastsToEachOfMyDescendants SumOfCastsToEachOfMyDescendants_INSTANCE = new SumOfCastsToEachOfMyDescendants();
+	private static final ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants_INSTANCE = new ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants();
 	private static final NoOfCastsToMe NoOfCastsToMe_INSTANCE = new NoOfCastsToMe();
-	private static final AverageOfDistinctClientsDoingCastsToMyDescendants2 AverageOfDistinctClientsDoingCastsToMyDescendants2_INSTANCE = new AverageOfDistinctClientsDoingCastsToMyDescendants2();
+	private static final MedianOfDistinctClientsDoingCastsToMyDescendants MedianOfDistinctClientsDoingCastsToMyDescendants_INSTANCE = new MedianOfDistinctClientsDoingCastsToMyDescendants();
+	private static final MedianOfDistinctClientsDoingCastsToMyDescendants2 MedianOfDistinctClientsDoingCastsToMyDescendants2_INSTANCE = new MedianOfDistinctClientsDoingCastsToMyDescendants2();
 	private static final NoOfDistinctClientsDoingCastsToEachOfMyDescendants NoOfDistinctClientsDoingCastsToEachOfMyDescendants_INSTANCE = new NoOfDistinctClientsDoingCastsToEachOfMyDescendants();
 	private static final ToString ToString_INSTANCE = new ToString();
-	private static final AverageCastsToEachOfMyDescendants AverageCastsToEachOfMyDescendants_INSTANCE = new AverageCastsToEachOfMyDescendants();
-	private static final AverageOfDistinctClientsDoingCastsToMyDescendants AverageOfDistinctClientsDoingCastsToMyDescendants_INSTANCE = new AverageOfDistinctClientsDoingCastsToMyDescendants();
+	private static final ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2 ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2_INSTANCE = new ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2();
 	private static final DistinctMethodsWithCastsToMe DistinctMethodsWithCastsToMe_INSTANCE = new DistinctMethodsWithCastsToMe();
 	private static final MyClients2 MyClients2_INSTANCE = new MyClients2();
 	private static final AscendantsGroup AscendantsGroup_INSTANCE = new AscendantsGroup();
@@ -58,8 +62,20 @@ public class MClassImpl implements MClass {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double medianOfCastsToEachOfMyDescendants() {
+		return MedianOfCastsToEachOfMyDescendants_INSTANCE.compute(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.Integer sumOfCastsToEachOfMyDescendants() {
 		return SumOfCastsToEachOfMyDescendants_INSTANCE.compute(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants() {
+		return ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants_INSTANCE.compute(this);
 	}
 
 	@Override
@@ -70,8 +86,14 @@ public class MClassImpl implements MClass {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double averageOfDistinctClientsDoingCastsToMyDescendants2() {
-		return AverageOfDistinctClientsDoingCastsToMyDescendants2_INSTANCE.compute(this);
+	public java.lang.Double medianOfDistinctClientsDoingCastsToMyDescendants() {
+		return MedianOfDistinctClientsDoingCastsToMyDescendants_INSTANCE.compute(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double medianOfDistinctClientsDoingCastsToMyDescendants2() {
+		return MedianOfDistinctClientsDoingCastsToMyDescendants2_INSTANCE.compute(this);
 	}
 
 	@Override
@@ -88,14 +110,8 @@ public class MClassImpl implements MClass {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double averageCastsToEachOfMyDescendants() {
-		return AverageCastsToEachOfMyDescendants_INSTANCE.compute(this);
-	}
-
-	@Override
-	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double averageOfDistinctClientsDoingCastsToMyDescendants() {
-		return AverageOfDistinctClientsDoingCastsToMyDescendants_INSTANCE.compute(this);
+	public java.lang.Double arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2() {
+		return ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2_INSTANCE.compute(this);
 	}
 
 	@Override

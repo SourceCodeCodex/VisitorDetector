@@ -103,33 +103,46 @@ public class VisitorDetectorTests {
 	}
 
 	@Test
-	public void testAverageOfDistinctClietnsDoingCastsToMyDescendants() {
+	public void testMedianOfDistinctClientsDoingCastsToMyDescendants() {
 		MClass type = getType(types, "Test1");
-		Assert.assertEquals(new Double(0.0), type.averageOfDistinctClientsDoingCastsToMyDescendants());
+		Assert.assertEquals(new Double(0.0), type.medianOfDistinctClientsDoingCastsToMyDescendants());
 	}
-	
+
 	@Test
-	public void testAverageOfDistinctClietnsDoingCastsToMyDescendants2() {
+	public void testMedianOfDistinctClientsDoingCastsToMyDescendants2() {
 		MClass type = getType(types, "Test1");
-		Assert.assertEquals(new Double(0.0), type.averageOfDistinctClientsDoingCastsToMyDescendants());
+		Assert.assertEquals(new Double(0.0), type.medianOfDistinctClientsDoingCastsToMyDescendants());
 	}
 
 	@Test
 	public void testAverageCastsToEachOfMyDescendants() {
 		MClass type = getType(types, "OriginalTest");
-		Assert.assertEquals(new Double(3.0), type.averageCastsToEachOfMyDescendants());
+		Assert.assertEquals(new Double(3.0), type.medianOfCastsToEachOfMyDescendants());
 	}
 
 	@Test
 	public void testClientsOfAType() {
 		MClass type = getType(types, "Test1");
-		Assert.assertEquals(33, type.myClients().getElements().size());
+		Assert.assertEquals(34, type.myClients().getElements().size());
 	}
-	
+
 	@Test
 	public void testClientsOfAType2() {
 		MClass type = getType(types, "Test1");
-		Assert.assertEquals(14, type.myClients2().getElements().size());
-		
+		Assert.assertEquals(16, type.myClients2().getElements().size());
+	}
+
+	@Test
+	public void testArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants() {
+		MClass type = getType(types, "OriginalTest");
+		Double expected = 14.0 / 12.0;
+		Assert.assertEquals(expected, type.arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants());
+	}
+
+	@Test
+	public void testArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2() {
+		MClass type = getType(types, "Test1");
+		Double expected = 3.0 / 16.0;
+		Assert.assertEquals(expected, type.arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2());
 	}
 }

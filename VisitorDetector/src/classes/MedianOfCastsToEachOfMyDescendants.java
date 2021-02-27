@@ -9,7 +9,7 @@ import ro.lrg.xcore.metametamodel.PropertyComputer;
 import visitordetector.metamodel.entity.MClass;
 
 @PropertyComputer
-public class AverageCastsToEachOfMyDescendants implements IPropertyComputer<Double, MClass> {
+public class MedianOfCastsToEachOfMyDescendants implements IPropertyComputer<Double, MClass> {
 
 	@Override
 	public Double compute(MClass arg0) {

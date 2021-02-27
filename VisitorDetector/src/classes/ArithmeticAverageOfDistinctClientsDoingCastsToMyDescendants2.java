@@ -1,7 +1,6 @@
 package classes;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,7 @@ import visitordetector.metamodel.entity.MClass;
 import visitordetector.metamodel.entity.MMethod;
 
 @PropertyComputer
-public class AverageOfDistinctClientsDoingCastsToMyDescendants2 implements IPropertyComputer<Double, MClass> {
+public class ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2 implements IPropertyComputer<Double, MClass> {
 	private Map<String, Integer> castsPerClient;
 
 	@Override
@@ -28,7 +27,7 @@ public class AverageOfDistinctClientsDoingCastsToMyDescendants2 implements IProp
 			clients = getClients(descendent);
 			incrementCastsPerClient(clients);
 		}
-		return computeMedian();
+		return computeArithmeticAverage();
 	}
 
 	private List<String> getClients(MClass arg0) {
@@ -58,7 +57,7 @@ public class AverageOfDistinctClientsDoingCastsToMyDescendants2 implements IProp
 		}
 	}
 
-	private Double computeMedian() {
+	private Double computeArithmeticAverage() {
 		List<Integer> descendantsPerClient = new ArrayList<>();
 		castsPerClient.forEach((client, noOfDescendants) -> {
 			descendantsPerClient.add(noOfDescendants);
@@ -69,14 +68,10 @@ public class AverageOfDistinctClientsDoingCastsToMyDescendants2 implements IProp
 			return 0.0;
 		case 1:
 			return descendantsPerClient.get(0) * 1.0;
-		case 2:
-			return (descendantsPerClient.get(0) + descendantsPerClient.get(1)) / 2.0;
 		default:
-			Collections.sort(descendantsPerClient);
-			descendantsPerClient.forEach(des -> System.out.println(des));
-			System.out.println();
-			return size % 2 != 0 ? descendantsPerClient.get(size / 2)
-					: (descendantsPerClient.get(size / 2 - 1) + descendantsPerClient.get(size / 2)) / 2.0;
+			castsPerClient.forEach((client, noOfDescendants) -> System.out.println(client + "-" + noOfDescendants));
+			return descendantsPerClient.stream().reduce(0, (a, b) -> a + b) * 1.0 / descendantsPerClient.size();
 		}
 	}
+
 }

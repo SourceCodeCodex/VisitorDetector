@@ -17,6 +17,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
@@ -24,6 +25,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
@@ -86,13 +88,17 @@ public class MyClients2 implements IRelationBuilder<MMethod, MClass> {
 		cUnit.accept(new ASTVisitor() {
 			public boolean visit(MethodDeclaration methodDeclaration) {
 				if (!visited.get()) {
-					IJavaElement element = methodDeclaration.resolveBinding().getJavaElement();
-					if (element != null
-							&& StringParser.replaceKey(element.toString()).equals(methodSearchingFor.toString())) {
-						boolean result = visitMethodBody(methodDeclaration.getBody(), baseType, methodSearchingFor);
-						visited.set(true);
-						if (result)
-							found.set(true);
+					try {
+						IJavaElement element = methodDeclaration.resolveBinding().getJavaElement();
+						if (element != null
+								&& StringParser.replaceKey(element.toString()).equals(methodSearchingFor.toString())) {
+							boolean result = visitMethodBody(methodDeclaration.getBody(), baseType, methodSearchingFor);
+							visited.set(true);
+							if (result)
+								found.set(true);
+						}
+					} catch (NullPointerException e) {
+						System.err.println("visitCompilationUnit -> " + e);
 					}
 				}
 				return super.visit(methodDeclaration);
@@ -102,55 +108,36 @@ public class MyClients2 implements IRelationBuilder<MMethod, MClass> {
 	}
 
 	private boolean visitMethodBody(Block methodBody, IType baseType, IMethod methodSearchingFor) {
-		if (methodBody == null)
+		if (methodBody == null || methodBody.statements().size() == 0)
 			return false;
 		AtomicBoolean found = new AtomicBoolean(false);
 		methodBody.accept(new ASTVisitor() {
 			public boolean visit(MethodInvocation methodInvocation) {
 				if (!found.get()) {
-					List<IJavaElement> elements = visitMethodInvocation(methodInvocation, methodSearchingFor);
-					IJavaElement firstElement = elements.get(0);
-					int pos;
-					if (firstElement.getElementType() == IJavaElement.TYPE) {
-						IType type = (IType) firstElement;
-						if (StringParser.replaceKey(type.toString()).equals(baseType.toString())
-								&& elements.size() > 2) {
+					try {
+						List<IJavaElement> elements = visitMethodInvocation(methodInvocation, methodSearchingFor);
+						boolean result = checkMethodInvocation(elements, baseType, methodSearchingFor);
+						if (result)
 							found.set(true);
-						}
-					} else if (elements.size() == 1) {
-						IMethod method = (IMethod) firstElement;
-						try {
-							if (method.getDeclaringType().toString().equals(baseType.toString())
-									&& !Flags.isStatic(method.getFlags())) {
-								found.set(true);
-							}
-						} catch (JavaModelException e) {
-							System.err.println("MyClientsGroup2 -> visitMethodBody:" + e.getMessage());
-						}
-
-					} else if ((pos = getSecondToLastPosition(elements)) > -1) {
-						IMethod method = (IMethod) (elements.get(pos));
-						try {
-							if (method.getReturnType().equals(baseType.getElementName())) {
-								found.set(true);
-							}
-						} catch (JavaModelException e) {
-							System.err.println("MyClientsGroup2 -> visitMethodBody:" + e.getMessage());
-						}
-					} else if (firstElement.getElementType() == IJavaElement.FIELD) {
-						IField field = (IField) firstElement;
-						String fullyQualifiedName = baseType.getFullyQualifiedName().replace('.', '/');
-						String fieldInfo = field.toString();
-						fieldInfo = fieldInfo.substring(fieldInfo.lastIndexOf(field.getElementName()));
-						if (fieldInfo.contains(fullyQualifiedName)) {
+					} catch (Exception e) {
+						System.err.println("visitMethodBody -> " + e);
+					}
+				}
+				return super.visit(methodInvocation);
+			}
+		});
+		if (found.get())
+			return found.get();
+		methodBody.accept(new ASTVisitor() {
+			public boolean visit(SuperMethodInvocation methodInvocation) {
+				if (!found.get()) {
+					try {
+						List<IJavaElement> elements = visitMethodInvocation(methodInvocation, methodSearchingFor);
+						boolean result = checkMethodInvocation(elements, baseType, methodSearchingFor);
+						if (result)
 							found.set(true);
-						}
-					} else if (firstElement.getElementType() == IJavaElement.LOCAL_VARIABLE) {
-						ILocalVariable variable = (ILocalVariable) firstElement;
-						String fullyQualifiedName = baseType.getFullyQualifiedName().replace('.', '/');
-						if (variable.toString().contains(fullyQualifiedName)) {
-							found.set(true);
-						}
+					} catch (Exception e) {
+						System.err.println("visitMethodBody -> " + e);
 					}
 				}
 				return super.visit(methodInvocation);
@@ -159,26 +146,143 @@ public class MyClients2 implements IRelationBuilder<MMethod, MClass> {
 		return found.get();
 	}
 
-	private List<IJavaElement> visitMethodInvocation(MethodInvocation methodInvocation, IMethod methodSearchingFor) {
+	private boolean checkMethodInvocation(List<IJavaElement> elements, IType baseType, IMethod methodSearchingFor) {
+		AtomicBoolean found = new AtomicBoolean(false);
+		IJavaElement firstElement = elements.get(0);
+		if (firstElement.getElementType() == IJavaElement.PACKAGE_FRAGMENT
+				|| firstElement.getElementType() == IJavaElement.PACKAGE_FRAGMENT_ROOT) {
+			int i = getFirstElement(elements);
+			firstElement = elements.get(i);
+			elements = elements.subList(i, elements.size());
+		}
+		if (firstElement.getElementType() == IJavaElement.TYPE) {
+			IType type = (IType) firstElement;
+			if (StringParser.replaceKey(type.toString()).equals(baseType.toString()) && elements.size() > 2) {
+				found.set(true);
+			}
+		} else if (elements.size() == 1) {
+			IMethod method = (IMethod) firstElement;
+			try {
+				if (method.getDeclaringType().toString().equals(baseType.toString())
+						&& !Flags.isStatic(method.getFlags())) {
+					found.set(true);
+				}
+			} catch (JavaModelException e) {
+				System.err.println("MyClientsGroup2 -> visitMethodBody:" + e.getMessage());
+			}
+		} else if (firstElement.getElementType() == IJavaElement.FIELD) {
+			String fieldInfo = getFieldInfo((IField) firstElement);
+			if (checkMethodInvocationForSearchedType(fieldInfo, elements, baseType)) {
+				found.set(true);
+			}
+		} else if (firstElement.getElementType() == IJavaElement.LOCAL_VARIABLE) {
+			ILocalVariable variable = (ILocalVariable) firstElement;
+			if (checkMethodInvocationForSearchedType(variable.toString(), elements, baseType)) {
+				found.set(true);
+			}
+		} else if (firstElement.getElementType() == IJavaElement.METHOD) {
+			if (checkChainingForSearchedType(firstElement, elements, baseType))
+				found.set(true);
+		}
+		return found.get();
+	}
+
+	private boolean checkChainingForSearchedType(IJavaElement element, List<IJavaElement> elements, IType baseType) {
+		if (element.getElementType() == IJavaElement.METHOD) {
+			IMethod method = (IMethod) element;
+			try {
+				if (method.getReturnType().contains(baseType.getElementName()) && elements.size() > 1
+						&& elements.get(1).getElementType() == IJavaElement.METHOD) {
+					return true;
+				}
+			} catch (JavaModelException e) {
+				e.printStackTrace();
+			}
+		} else if (element.getElementType() == IJavaElement.FIELD) {
+			String fieldInfo = getFieldInfo((IField) element);
+			return checkMethodInvocationForSearchedType(fieldInfo, elements, baseType);
+		}
+		if (elements.size() > 1)
+			return checkChainingForSearchedType(elements.get(1), elements.subList(1, elements.size()), baseType);
+		return false;
+	}
+
+	private String getFieldInfo(IField field) {
+		String fieldInfo = field.toString();
+		return fieldInfo.substring(fieldInfo.lastIndexOf(field.getElementName()));
+	}
+
+	private int getFirstElement(List<IJavaElement> elements) {
+		int i = 0;
+		while (elements.get(i).getElementType() == IJavaElement.PACKAGE_FRAGMENT
+				|| elements.get(i).getElementType() == IJavaElement.PACKAGE_FRAGMENT_ROOT)
+			i++;
+		return i;
+	}
+
+	private boolean checkMethodInvocationForSearchedType(String element, List<IJavaElement> elements, IType baseType) {
+		String fullyQualifiedName = baseType.getFullyQualifiedName().replace('.', '/');
+		int i = 1;
+		if (element.contains(fullyQualifiedName)) {
+			IJavaElement secondElement = elements.get(i);
+			if (secondElement.getElementType() == IJavaElement.METHOD)
+				return true;
+			while (elements.get(i).getElementType() == IJavaElement.LOCAL_VARIABLE)
+				i++;
+			secondElement = elements.get(i);
+			if (secondElement.getElementType() == IJavaElement.METHOD)
+				return true;
+			if (secondElement.getElementType() == IJavaElement.FIELD) {
+				String fieldInfo = getFieldInfo((IField) secondElement);
+				return checkMethodInvocationForSearchedType(fieldInfo, elements.subList(i, elements.size()), baseType);
+			}
+		} else {
+			while (i < elements.size()) {
+				IJavaElement secondElement = elements.get(i);
+				if (secondElement.getElementType() == IJavaElement.FIELD) {
+					String fieldInfo = getFieldInfo((IField) secondElement);
+					return checkMethodInvocationForSearchedType(fieldInfo, elements.subList(i, elements.size()),
+							baseType);
+				} else if (secondElement.getElementType() == IJavaElement.METHOD) {
+					IMethod method = (IMethod) secondElement;
+					try {
+						if (method.getReturnType().contains(baseType.getElementName()) && i < (elements.size() - 1)
+								&& elements.get(i + 1).getElementType() == IJavaElement.METHOD)
+							return true;
+					} catch (JavaModelException e) {
+						e.printStackTrace();
+					}
+				}
+				i++;
+			}
+		}
+		return false;
+	}
+
+	private List<IJavaElement> visitMethodInvocation(ASTNode methodInvocation, IMethod methodSearchingFor) {
 		List<IJavaElement> elements = new ArrayList<>();
 		List<String> params = new ArrayList<>();
 		methodInvocation.accept(new ASTVisitor() {
 			public boolean visit(SimpleName name) {
-				IJavaElement element = name.resolveBinding().getJavaElement();
-				if (element != null && !isAParameter(params, name.toString())) {
-					elements.add(element);
-					if (element.getElementType() == IJavaElement.METHOD) {
-						params.clear();
-						String methoInvocationInfo = methodInvocation.toString();
-						String methodInfo = methoInvocationInfo.substring(methoInvocationInfo.indexOf(name.toString()));
-						try {
-							params.add(methodInfo.substring(methodInfo.indexOf('('),
-									getParametersClosingPar(methodInfo) + 1));
-						} catch (Exception e) {
-							System.err.println(methodInvocation);
-							System.err.println(methodSearchingFor);
+				try {
+					IJavaElement element = name.resolveBinding().getJavaElement();
+					if (element != null && !isAParameter(params, name.toString())) {
+						elements.add(element);
+						if (element.getElementType() == IJavaElement.METHOD) {
+							params.clear();
+							String methoInvocationInfo = methodInvocation.toString();
+							String methodInfo = methoInvocationInfo
+									.substring(methoInvocationInfo.indexOf(name.toString()));
+							try {
+								params.add(methodInfo.substring(methodInfo.indexOf('('),
+										getParametersClosingPar(methodInfo) + 1));
+							} catch (Exception e) {
+								System.err.println(methodInvocation);
+							}
 						}
 					}
+				} catch (NullPointerException e) {
+					System.err.println("visitMethodInvocation -> " + e);
 				}
 				return super.visit(name);
 			}
@@ -210,16 +314,6 @@ public class MyClients2 implements IRelationBuilder<MMethod, MClass> {
 		return false;
 	}
 
-	private int getSecondToLastPosition(List<IJavaElement> elements) {
-		int index = elements.size() - 2;
-		while (index >= 0) {
-			if (elements.get(index).getElementType() == IJavaElement.METHOD)
-				return index;
-			index--;
-		}
-		return index;
-	}
-
 	private List<SearchMatch> getMethodsMatchesUsingTheseFields(List<IField> fields) throws CoreException {
 		List<SearchMatch> matches = new LinkedList<>();
 		List<String> uniqueResources = new ArrayList<>();
@@ -243,8 +337,7 @@ public class MyClients2 implements IRelationBuilder<MMethod, MClass> {
 							matches.add(arg0);
 						}
 					} catch (Exception e) {
-						 System.err.println("String Parser error ->" + element + " : " +
-						 e.getMessage());
+						System.err.println("String Parser error ->" + element + " : " + e.getMessage());
 
 					}
 				}

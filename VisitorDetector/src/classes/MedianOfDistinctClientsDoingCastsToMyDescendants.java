@@ -15,7 +15,7 @@ import visitordetector.metamodel.entity.MClass;
 import visitordetector.metamodel.entity.MMethod;
 
 @PropertyComputer
-public class AverageOfDistinctClientsDoingCastsToMyDescendants implements IPropertyComputer<Double, MClass> {
+public class MedianOfDistinctClientsDoingCastsToMyDescendants implements IPropertyComputer<Double, MClass> {
 	private Map<String, Integer> castsPerClient;
 
 	@Override
@@ -60,8 +60,10 @@ public class AverageOfDistinctClientsDoingCastsToMyDescendants implements IPrope
 
 	private Double computeMedian() {
 		List<Integer> descendantsPerClient = new ArrayList<>();
+		List<String> clients = new ArrayList<>();
 		castsPerClient.forEach((client, noOfDescendants) -> {
 			descendantsPerClient.add(noOfDescendants);
+			clients.add(client);
 		});
 		int size = descendantsPerClient.size();
 		switch (size) {
@@ -73,10 +75,17 @@ public class AverageOfDistinctClientsDoingCastsToMyDescendants implements IPrope
 			return (descendantsPerClient.get(0) + descendantsPerClient.get(1)) / 2.0;
 		default:
 			Collections.sort(descendantsPerClient);
+			Collections.sort(clients, (a, b) -> castsPerClient.get(a) - castsPerClient.get(b));
 			descendantsPerClient.forEach(des -> System.out.println(des));
+//			printCastsPerClient(clients, descendantsPerClient);
 			System.out.println();
 			return size % 2 != 0 ? descendantsPerClient.get(size / 2)
 					: (descendantsPerClient.get(size / 2 - 1) + descendantsPerClient.get(size / 2)) / 2.0;
 		}
+	}
+	
+	private void printCastsPerClient(List<String> clients, List<Integer> casts) {
+		for(int i=0; i < clients.size(); i++)
+			System.out.println(clients.get(i) + " -> " + casts.get(i));
 	}
 }

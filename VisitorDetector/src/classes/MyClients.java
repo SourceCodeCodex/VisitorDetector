@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -24,6 +25,7 @@ import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
@@ -75,7 +77,9 @@ public class MyClients implements IRelationBuilder<MMethod, MClass> {
 				CompilationUnit cUnit = (CompilationUnit) parser.createAST(null);
 				boolean found = visitCompilationUnit(cUnit, method, arg0.getUnderlyingObject());
 				if (!found || (found && searchMethod(method, fieldMethods))) {
-					allMethods.add(method);
+					 allMethods.add(method);
+				} else {
+//					allMethods.add(method);
 				}
 			}
 			allMethods.addAll(fieldMethods);
@@ -96,13 +100,17 @@ public class MyClients implements IRelationBuilder<MMethod, MClass> {
 		cUnit.accept(new ASTVisitor() {
 			public boolean visit(MethodDeclaration methodDeclaration) {
 				if (!visited.get()) {
-					IJavaElement element = methodDeclaration.resolveBinding().getJavaElement();
-					if (element != null
-							&& StringParser.replaceKey(element.toString()).equals(methodSearchingFor.toString())) {
-						boolean result = containsOnlyStaticReferences(methodDeclaration, baseType);
-						visited.set(true);
-						if (result)
-							found.set(true);
+					try {
+						IJavaElement element = methodDeclaration.resolveBinding().getJavaElement();
+						if (element != null
+								&& StringParser.replaceKey(element.toString()).equals(methodSearchingFor.toString())) {
+							boolean result = containsOnlyStaticReferences(methodDeclaration, baseType);
+							visited.set(true);
+							if (result)
+								found.set(true);
+						}
+					} catch (NullPointerException e) {
+						System.err.println("visitCompilationUnit -> " + e);
 					}
 				}
 				return super.visit(methodDeclaration);
@@ -113,26 +121,39 @@ public class MyClients implements IRelationBuilder<MMethod, MClass> {
 
 	private boolean containsOnlyStaticReferences(MethodDeclaration method, IType baseType) {
 		Block body = method.getBody();
-		if (body == null)
+		if (body == null || body.statements().size() == 0)
 			return true;
 		String fullyQualifiedName = baseType.getFullyQualifiedName().replace('.', '/');
+		AtomicBoolean containsStaticReference = new AtomicBoolean(false);
+		AtomicBoolean containsNonStaticReference = new AtomicBoolean(false);
+		AtomicBoolean constainsTypeAnnotation = new AtomicBoolean(false);
 		Type returnType = method.getReturnType2();
 		if (returnType != null) {
-			IJavaElement returnTypeBinding = returnType.resolveBinding().getJavaElement();
-			if (returnTypeBinding != null && returnTypeBinding.toString().contains(fullyQualifiedName))
-				return false;
+			try {
+				IJavaElement returnTypeBinding = returnType.resolveBinding().getJavaElement();
+				if (returnTypeBinding != null && returnTypeBinding.toString().contains(fullyQualifiedName)) {
+					// System.out.println("ReturnType" + "-" + method.getName());
+					return false;
+				}
+			} catch (NullPointerException e) {
+				System.err.println("returnType ->" + e);
+			}
 		}
 		List<SingleVariableDeclaration> parameters = method.parameters();
 		for (SingleVariableDeclaration parameter : parameters) {
 			Type paramType = parameter.getType();
-			IJavaElement paramTypeBinding = paramType.resolveBinding().getJavaElement();
-			if (paramTypeBinding != null && paramTypeBinding.toString().contains(fullyQualifiedName))
-				return false;
+			try {
+				IJavaElement paramTypeBinding = paramType.resolveBinding().getJavaElement();
+				if (paramTypeBinding != null && paramTypeBinding.toString().contains(fullyQualifiedName)) {
+					// System.out.println("ParamType" + "-" + method.getName());
+					return false;
+				}
+			} catch (NullPointerException e) {
+				System.err.println("paramType ->" + e);
+			}
+
 		}
 
-		AtomicBoolean containsStaticReference = new AtomicBoolean(false);
-		AtomicBoolean containsNonStaticReference = new AtomicBoolean(false);
-		AtomicBoolean constainsTypeAnnotation = new AtomicBoolean(false);
 		Javadoc methodDoc = method.getJavadoc();
 		if (methodDoc != null && methodDoc.toString().contains(baseType.getElementName()))
 			constainsTypeAnnotation.set(true);
@@ -140,55 +161,100 @@ public class MyClients implements IRelationBuilder<MMethod, MClass> {
 		for (Statement statement : statements) {
 			statement.accept(new ASTVisitor() {
 				public boolean visit(QualifiedName field) {
-					IJavaElement qualifier = field.getQualifier().resolveBinding().getJavaElement();
-					if (qualifier != null && qualifier.getElementType() == IJavaElement.TYPE) {
-						if (qualifier.toString().contains(fullyQualifiedName))
-							containsStaticReference.set(true);
+					try {
+						IJavaElement qualifier = field.getQualifier().resolveBinding().getJavaElement();
+						if (qualifier != null && qualifier.getElementType() == IJavaElement.TYPE) {
+							if (qualifier.toString().contains(fullyQualifiedName))
+								containsStaticReference.set(true);
+						}
+					} catch (NullPointerException e) {
+						System.err.println("qualifiedName ->" + e);
 					}
 					return super.visit(field);
 				}
 			});
 			statement.accept(new ASTVisitor() {
+				public boolean visit(MethodInvocation methodInvocation) {
+					try {
+						IJavaElement element = methodInvocation.resolveMethodBinding().getJavaElement();
+						IMethod method = (IMethod) element;
+						if (method.getDeclaringType().toString().equals(baseType.toString())
+								&& Flags.isStatic(method.getFlags())) {
+							containsStaticReference.set(true);
+						}
+					} catch (NullPointerException | JavaModelException e) {
+						System.err.println("methodInvocation ->" + e);
+					}
+					return super.visit(methodInvocation);
+				}
+			});
+			statement.accept(new ASTVisitor() {
 				public boolean visit(CastExpression field) {
-					IJavaElement type = field.getType().resolveBinding().getJavaElement();
-					if (type != null && type.toString().contains(fullyQualifiedName))
-						containsNonStaticReference.set(true);
+					try {
+						IJavaElement type = field.getType().resolveBinding().getJavaElement();
+						if (type != null && type.toString().contains(fullyQualifiedName))
+							containsNonStaticReference.set(true);
+					} catch (NullPointerException e) {
+						System.err.println("castExpression ->" + e);
+					}
 					return super.visit(field);
 				}
 			});
-			if (containsNonStaticReference.get())
+			if (containsNonStaticReference.get()) {
+				// System.out.println("CastExpression" + "-" + method.getName());
 				return false;
+
+			}
+
 			statement.accept(new ASTVisitor() {
 				public boolean visit(VariableDeclarationStatement field) {
-					IJavaElement type = field.getType().resolveBinding().getJavaElement();
-					if (type != null && type.toString().contains(fullyQualifiedName))
-						containsNonStaticReference.set(true);
+					try {
+						IJavaElement type = field.getType().resolveBinding().getJavaElement();
+						if (type != null && type.toString().contains(fullyQualifiedName))
+							containsNonStaticReference.set(true);
+					} catch (NullPointerException e) {
+						System.err.println("variableDeclarationStatement ->" + e);
+					}
 					return super.visit(field);
 				}
 			});
-			if (containsNonStaticReference.get())
+			if (containsNonStaticReference.get()) {
+				// System.out.println("VariableDeclarationStatement" + "-" + method.getName());
 				return false;
+			}
 			statement.accept(new ASTVisitor() {
 				public boolean visit(EnhancedForStatement forStatement) {
 					SingleVariableDeclaration param = forStatement.getParameter();
-					IJavaElement type = param.getType().resolveBinding().getJavaElement();
-					if (type != null && type.toString().contains(fullyQualifiedName))
-						containsNonStaticReference.set(true);
+					try {
+						IJavaElement type = param.getType().resolveBinding().getJavaElement();
+						if (type != null && type.toString().contains(fullyQualifiedName))
+							containsNonStaticReference.set(true);
+					} catch (NullPointerException e) {
+						System.err.println("enhancedForStatement ->" + e);
+					}
 					return super.visit(forStatement);
 				}
 			});
-			if (containsNonStaticReference.get())
+			if (containsNonStaticReference.get()) {
+				// System.out.println("EnhancedForStatement" + "-" + method.getName());
 				return false;
+			}
 			statement.accept(new ASTVisitor() {
 				public boolean visit(InstanceofExpression iExp) {
-					IJavaElement type = iExp.getRightOperand().resolveBinding().getJavaElement();
-					if (type != null && type.toString().contains(fullyQualifiedName))
-						containsNonStaticReference.set(true);
+					try {
+						IJavaElement type = iExp.getRightOperand().resolveBinding().getJavaElement();
+						if (type != null && type.toString().contains(fullyQualifiedName))
+							containsNonStaticReference.set(true);
+					} catch (NullPointerException e) {
+						System.err.println("instanceOfExpression ->" + e);
+					}
 					return super.visit(iExp);
 				}
 			});
-			if (containsNonStaticReference.get())
+			if (containsNonStaticReference.get()) {
+				// System.out.println("InstanceofExpression" + "-" + method.getName());
 				return false;
+			}
 		}
 		return containsStaticReference.get() || constainsTypeAnnotation.get();
 	}
@@ -228,8 +294,7 @@ public class MyClients implements IRelationBuilder<MMethod, MClass> {
 							matches.add(arg0);
 						}
 					} catch (Exception e) {
-						 System.err.println("String Parser error ->" + element + " : " +
-						 e.getMessage());
+						System.err.println("String Parser error ->" + element + " : " + e.getMessage());
 
 					}
 				}
@@ -295,6 +360,7 @@ public class MyClients implements IRelationBuilder<MMethod, MClass> {
 						matches.add(arg0);
 					}
 				} catch (Exception e) {
+					System.err.println("Method parsing ->" + element);
 					String field = StringParser.parseField(element);
 					if (!pFields.contains(field))
 						pFields.add(StringParser.parseField(element));
