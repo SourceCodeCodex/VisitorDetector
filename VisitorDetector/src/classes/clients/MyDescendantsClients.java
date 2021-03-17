@@ -1,4 +1,4 @@
-package classes;
+package classes.clients;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class MyDescendantsClients implements IRelationBuilder<MMethod, MClass> {
 		List<MMethod> methodsWithoutDuplicates = new LinkedList<>();
 		for (MClass descendent : descendants) {
 			try {
-				methodsWithoutDuplicates = Utils.removeDuplicates(descendent.myClients().getElements(),
+				methodsWithoutDuplicates = Utils.removeDuplicates(descendent.myClients1().getElements(),
 						methodsWithoutDuplicates);
 			} catch (JavaModelException e) {
 				System.err.println("MMethod - MClass -> MyDescendantsClients:" + e.getMessage());

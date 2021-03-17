@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.eclipse.jdt.core.JavaModelException;
 
 import visitordetector.metamodel.entity.MClass;
 import visitordetector.metamodel.entity.MMethod;
@@ -22,12 +21,12 @@ public class MathUtils {
 
 	public static Double computeMedian(List<MMethod> allClients, List<MClass> descendants) {
 		prepareCastsPerClient(allClients, descendants);
-		return computeMedian();
+		return computeMedian(getDescendatsPerClient());
 	}
 
-	private static void prepareCastsPerClient(List<MMethod> allClients, List<MClass> descendants) {
+	public static void prepareCastsPerClient(List<MMethod> allClients, List<MClass> descendants) {
 		castsPerClient = new HashMap<>();
-		allClients.forEach(client -> castsPerClient.putIfAbsent(getElementName(client), 0));
+		allClients.forEach(client -> castsPerClient.putIfAbsent(Utils.getElementName(client), 0));
 		for (MClass descendent : descendants) {
 			List<String> clients;
 			clients = getClients(descendent);
@@ -39,20 +38,10 @@ public class MathUtils {
 	private static List<String> getClients(MClass arg0) {
 		List<String> clients = new ArrayList<>();
 		for (MMethod method : arg0.distinctMethodsWithCastsToMe().getElements()) {
-			String client = getElementName(method);
+			String client = Utils.getElementName(method);
 			clients.add(client);
 		}
 		return clients;
-	}
-
-	private static String getElementName(MMethod method) {
-		try {
-			return method.parentClassName() + "-" + method.toString() + "-"
-					+ method.getUnderlyingObject().getSignature() + method.getUnderlyingObject().getReturnType();
-		} catch (JavaModelException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	private static void incrementCastsPerClient(List<String> clients) {
@@ -80,14 +69,25 @@ public class MathUtils {
 		}
 	}
 
-	private static Double computeMedian() {
+	private static List<Integer> getDescendatsPerClient() {
 		List<Integer> descendantsPerClient = new ArrayList<>();
-		List<String> clients = new ArrayList<>();
 		castsPerClient.forEach((client, noOfDescendants) -> {
 			descendantsPerClient.add(noOfDescendants);
+		});
+		return descendantsPerClient;
+	}
+
+	private static List<String> getClients() {
+		List<String> clients = new ArrayList<>();
+		castsPerClient.forEach((client, noOfDescendants) -> {
 			clients.add(client);
 		});
+		return clients;
+	}
+
+	public static Double computeMedian(List<Integer> descendantsPerClient) {
 		int size = descendantsPerClient.size();
+
 		switch (size) {
 		case 0:
 			return 0.0;
@@ -97,9 +97,7 @@ public class MathUtils {
 			return (descendantsPerClient.get(0) + descendantsPerClient.get(1)) / 2.0;
 		default:
 			Collections.sort(descendantsPerClient);
-			Collections.sort(clients, (a, b) -> castsPerClient.get(a) - castsPerClient.get(b));
 			descendantsPerClient.forEach(des -> System.out.println(des));
-			// printCastsPerClient(clients, descendantsPerClient);
 			System.out.println();
 			return size % 2 != 0 ? descendantsPerClient.get(size / 2)
 					: (descendantsPerClient.get(size / 2 - 1) + descendantsPerClient.get(size / 2)) / 2.0;

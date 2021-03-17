@@ -6,14 +6,28 @@ public class StringParser {
 
 	public static PseudoMethod parse(String temp) {
 		if (temp.contains("<lambda"))
-			return parseLambdaString(temp);
+			return parseUnusualString(temp, "<lambda");
+		else if (temp.contains("<anonymous"))
+			return parseAnonymous(temp);
 		else if (temp.contains("{key"))
 			return parseString(temp);
 		return null;
 	}
 
-	private static PseudoMethod parseLambdaString(String temp) {
-		temp = temp.substring(temp.indexOf("<lambda"));
+	private static PseudoMethod parseAnonymous(String temp) {
+		try {
+			temp = temp.substring(0, temp.lastIndexOf("]]") + 2);
+			return parseUnusualString(temp, "<anonymous");
+		} catch (Exception e) {
+			System.err.println("parseAnonymous->" + temp);
+		}
+		if (temp.contains("{key"))
+			return parseString(temp);
+		return null;
+	}
+
+	private static PseudoMethod parseUnusualString(String temp, String info) {
+		temp = temp.substring(temp.lastIndexOf(info));
 		String args[] = getArgs(temp);
 		String name = getContainingMethodName(temp);
 		temp = temp.substring(temp.indexOf(name) + name.length() + 1);

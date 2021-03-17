@@ -24,6 +24,7 @@ import ro.lrg.xcore.metametamodel.Group;
 import ro.lrg.xcore.metametamodel.IRelationBuilder;
 import ro.lrg.xcore.metametamodel.RelationBuilder;
 import utils.PseudoMethod;
+import utils.SearchUtils;
 import utils.StringParser;
 import visitordetector.metamodel.entity.MClass;
 import visitordetector.metamodel.entity.MMethod;
@@ -38,8 +39,9 @@ public class DistinctMethodsWithCastsToMe implements IRelationBuilder<MMethod, M
 		pMethods = new LinkedList<>();
 		Group<MMethod> foundMethods = new Group<>();
 		try {
+			SearchUtils searchUtils = new SearchUtils();
 			List<SearchMatch> matches = this.getMatches(arg0);
-			List<IMethod> methods = this.getMethods(matches);
+			List<IMethod> methods = searchUtils.getMethods(matches, pMethods);
 			for (IMethod method : methods) {
 				MMethod m = Factory.getInstance().createMMethod(method);
 				foundMethods.add(m);
@@ -61,14 +63,18 @@ public class DistinctMethodsWithCastsToMe implements IRelationBuilder<MMethod, M
 
 			@Override
 			public void acceptSearchMatch(SearchMatch arg0) throws CoreException {
-				PseudoMethod method = StringParser.parse(arg0.getElement().toString());
-				if (!pMethods.contains(method)) {
-					pMethods.add(method);
-				}
-				String path = arg0.getResource().getProjectRelativePath().toOSString();
-				if (!uniqueResources.contains(path)) {
-					uniqueResources.add(path);
-					matches.add(arg0);
+				try {
+					PseudoMethod method = StringParser.parse(arg0.getElement().toString());
+					if (!pMethods.contains(method)) {
+						pMethods.add(method);
+					}
+					String path = arg0.getResource().getProjectRelativePath().toOSString();
+					if (!uniqueResources.contains(path)) {
+						uniqueResources.add(path);
+						matches.add(arg0);
+					}
+				} catch (Exception e) {
+					System.err.println("DistinctMethodsWithCastsToMe->" + e);
 				}
 			}
 		};
@@ -76,39 +82,5 @@ public class DistinctMethodsWithCastsToMe implements IRelationBuilder<MMethod, M
 		searchEngine.search(pattern, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
 				requestor, new NullProgressMonitor());
 		return matches;
-	}
-
-	private List<IMethod> getMethods(List<SearchMatch> matches) throws JavaModelException {
-		List<IMethod> methods = new LinkedList<>();
-		for (SearchMatch match : matches) {
-			IJavaElement element = JavaCore.create(match.getResource());
-			if (element.getElementType() == IJavaElement.COMPILATION_UNIT) {
-				IType[] types = ((ICompilationUnit) element).getAllTypes();
-				for (IType type : types) {
-					List<PseudoMethod> remainingMethods = new LinkedList<>();
-					for (PseudoMethod pMethod : pMethods) {
-						boolean added = false;
-						if (pMethod.verifyClass(type.getFullyQualifiedName())) {
-							for (IMethod method : type.getMethods()) {
-								if (pMethod.verifyMethod(method)) {
-									methods.add(method);
-									added = true;
-									break;
-								}
-							}
-						}
-						if (added == false) {
-							remainingMethods.add(pMethod);
-						}
-					}
-					pMethods = remainingMethods;
-					if (pMethods.size() == 0)
-						return methods;
-				}
-			}
-
-		}
-
-		return methods;
 	}
 }
