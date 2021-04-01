@@ -68,7 +68,7 @@ public class MyClients3 implements IRelationBuilder<MMethod, MClass> {
 					clients.add(Factory.getInstance().createMMethod(method));
 			}
 		} catch (CoreException e) {
-			System.err.println("MMethod - MClass -> MyClientsGroup2:" + e.getMessage());
+//			System.err.println("MMethod - MClass -> MyClientsGroup2:" + e.getMessage());
 		}
 		return clients;
 	}
@@ -89,7 +89,7 @@ public class MyClients3 implements IRelationBuilder<MMethod, MClass> {
 								found.set(true);
 						}
 					} catch (NullPointerException e) {
-						System.err.println("visitCompilationUnit -> " + methodDeclaration.getName() + "-" + e);
+//						System.err.println("visitCompilationUnit -> " + methodDeclaration.getName() + "-" + e);
 					}
 				}
 				return super.visit(methodDeclaration);
@@ -111,7 +111,7 @@ public class MyClients3 implements IRelationBuilder<MMethod, MClass> {
 						if (SearchUtils.visitMethod(method, expr, analyzedType, fullyQualifiedName))
 							found.set(true);
 					} catch (Exception e) {
-						System.err.println("MethodInvocation -> " + methodInvocation);
+//						System.err.println("MethodInvocation -> " + methodInvocation);
 					}
 				}
 				return super.visit(methodInvocation);
@@ -128,7 +128,7 @@ public class MyClients3 implements IRelationBuilder<MMethod, MClass> {
 						if (SearchUtils.visitMethod(method, expr, analyzedType, fullyQualifiedName))
 							found.set(true);
 					} catch (Exception e) {
-						System.err.println("SuperMethodInvocation -> " + methodInvocation);
+//						System.err.println("SuperMethodInvocation -> " + methodInvocation);
 					}
 				}
 				return super.visit(methodInvocation);

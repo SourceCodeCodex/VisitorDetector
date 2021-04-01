@@ -15,6 +15,9 @@ public interface MSystem extends ro.lrg.xcore.metametamodel.XEntity {
 	public ro.lrg.xcore.metametamodel.Group<MClass> classGroupWithAtLeastTwoCastsToTheirDescendants();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
+	public ro.lrg.xcore.metametamodel.Group<MClass> classGroupWithPercentageOfClientsDoingCastsAtLeastOne();
+
+	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MClass> classGroup();
 
 	org.eclipse.jdt.core.IJavaProject getUnderlyingObject();

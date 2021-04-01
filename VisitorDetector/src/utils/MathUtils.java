@@ -16,7 +16,7 @@ public class MathUtils {
 
 	public static Double computeArithmeticAverage(List<MMethod> allClients, List<MClass> descendants) {
 		prepareCastsPerClient(allClients, descendants);
-		return computeArithmeticAverage();
+		return computeArithmeticAverage(getDescendatsPerClient());
 	}
 
 	public static Double computeMedian(List<MMethod> allClients, List<MClass> descendants) {
@@ -52,11 +52,7 @@ public class MathUtils {
 		}
 	}
 
-	private static Double computeArithmeticAverage() {
-		List<Integer> descendantsPerClient = new ArrayList<>();
-		castsPerClient.forEach((client, noOfDescendants) -> {
-			descendantsPerClient.add(noOfDescendants);
-		});
+	public static Double computeArithmeticAverage(List<Integer> descendantsPerClient) {
 		int size = descendantsPerClient.size();
 		switch (size) {
 		case 0:
@@ -64,7 +60,7 @@ public class MathUtils {
 		case 1:
 			return descendantsPerClient.get(0) * 1.0;
 		default:
-			castsPerClient.forEach((client, noOfDescendants) -> System.out.println(client + "-" + noOfDescendants));
+//			castsPerClient.forEach((client, noOfDescendants) -> System.out.println(client + "-" + noOfDescendants));
 			return descendantsPerClient.stream().reduce(0, (a, b) -> a + b) * 1.0 / descendantsPerClient.size();
 		}
 	}

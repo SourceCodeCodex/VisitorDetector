@@ -74,7 +74,7 @@ public class DistinctMethodsWithCastsToMe implements IRelationBuilder<MMethod, M
 						matches.add(arg0);
 					}
 				} catch (Exception e) {
-					System.err.println("DistinctMethodsWithCastsToMe->" + e);
+//					System.err.println("DistinctMethodsWithCastsToMe->" + e);
 				}
 			}
 		};

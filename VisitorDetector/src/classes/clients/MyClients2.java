@@ -85,7 +85,7 @@ public class MyClients2 implements IRelationBuilder<MMethod, MClass> {
 								found.set(true);
 						}
 					} catch (NullPointerException e) {
-						System.err.println("visitCompilationUnit -> " + methodDeclaration.getName() + "-" + e);
+//						System.err.println("visitCompilationUnit -> " + methodDeclaration.getName() + "-" + e);
 					}
 				}
 				return super.visit(methodDeclaration);
@@ -107,7 +107,7 @@ public class MyClients2 implements IRelationBuilder<MMethod, MClass> {
 						if (SearchUtils.visitMethod(method, expr, analyzedType, fullyQualifiedName))
 							found.set(true);
 					} catch (Exception e) {
-						System.err.println("MethodInvocation - visitMethodBody -> " + methodInvocation);
+//						System.err.println("MethodInvocation - visitMethodBody -> " + methodInvocation);
 					}
 				}
 				return super.visit(methodInvocation);
@@ -124,7 +124,7 @@ public class MyClients2 implements IRelationBuilder<MMethod, MClass> {
 						if (SearchUtils.visitMethod(method, expr, analyzedType, fullyQualifiedName))
 							found.set(true);
 					} catch (Exception e) {
-						System.err.println("visitMethodBody -> " + methodInvocation);
+//						System.err.println("visitMethodBody -> " + methodInvocation);
 					}
 				}
 				return super.visit(methodInvocation);

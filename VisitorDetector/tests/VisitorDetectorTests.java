@@ -165,21 +165,32 @@ public class VisitorDetectorTests {
 	@Test
 	public void testArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants() {
 		MClass type = getType(types, "OriginalTest");
-		Double expected = 21.0 / 19.0;
+		Double expected = 20.0 / 19.0;
 		Assert.assertEquals(expected, type.arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants1());
 	}
 
 	@Test
 	public void testArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2() {
 		MClass type = getType(types, "Test1");
-		Double expected = 5.0 / 26.0;
+		Double expected = 2.0 / 26.0;
 		Assert.assertEquals(expected, type.arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2());
 	}
 
 	@Test
 	public void testArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants3() {
 		MClass type = getType(types, "Test1");
-		Double expected = 9.0 / 30.0;
+		Double expected = 6.0 / 30.0;
 		Assert.assertEquals(expected, type.arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants3());
+	}
+	
+	@Test
+	public void testPercentageOfClientsDoingCastsToMyDescendants() {
+		MClass type = getType(types, "Test1");
+		Assert.assertEquals(new Double(20.0), type.percentageOfClientsDoingCastsToMyDescendants());
+	}
+	
+	@Test
+	public void testClassGroupWithPercentageOfClientsDoingCastsAtLeastOne() {
+		Assert.assertEquals(3, project.classGroupWithPercentageOfClientsDoingCastsAtLeastOne().getElements().size());
 	}
 }

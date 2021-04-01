@@ -6,6 +6,24 @@ public interface MClass extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.Integer noOfDistinctClientsDoingCastsToMe();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double medianOfCastsToEachOfMyDescendants();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double medianOfDistinctClientsDoingAtLeastOneCastToMyDescendants3();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants1();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants3();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double percentageOfClientsDoingCastsToMyDescendants();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.Double arithmeticAverageOfDistinctClientsDoingAtLeastOneCastToMyDescendants3();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
@@ -16,12 +34,6 @@ public interface MClass extends ro.lrg.xcore.metametamodel.XEntity {
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.Double arithmeticAverageOfDistinctClientsDoingAtLeastOneCastToMyDescendants1();
-
-	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double medianOfCastsToEachOfMyDescendants();
-
-	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double medianOfDistinctClientsDoingAtLeastOneCastToMyDescendants3();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.Integer noOfCastsToMe();
@@ -46,15 +58,6 @@ public interface MClass extends ro.lrg.xcore.metametamodel.XEntity {
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString();
-
-	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2();
-
-	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants1();
-
-	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants3();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MMethod> myClientsWithZeroCastsToMyDescendants1();

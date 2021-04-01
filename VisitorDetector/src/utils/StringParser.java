@@ -5,13 +5,18 @@ import java.util.Arrays;
 public class StringParser {
 
 	public static PseudoMethod parse(String temp) {
-		if (temp.contains("<lambda"))
-			return parseUnusualString(temp, "<lambda");
-		else if (temp.contains("<anonymous"))
-			return parseAnonymous(temp);
+		if (temp.contains("<lambda") || temp.contains("<anonymous"))
+			return parseType(temp);
 		else if (temp.contains("{key"))
 			return parseString(temp);
 		return null;
+	}
+
+	private static PseudoMethod parseType(String temp) {
+		String newTemp = temp.substring(0, temp.lastIndexOf("]]") + 2);
+		int anonymous = newTemp.lastIndexOf("<anonymous");
+		int lambda = newTemp.lastIndexOf("<lambda");
+		return anonymous >= lambda ? parseAnonymous(temp) : parseUnusualString(temp, "<lambda");
 	}
 
 	private static PseudoMethod parseAnonymous(String temp) {
@@ -19,7 +24,7 @@ public class StringParser {
 			temp = temp.substring(0, temp.lastIndexOf("]]") + 2);
 			return parseUnusualString(temp, "<anonymous");
 		} catch (Exception e) {
-			System.err.println("parseAnonymous->" + temp);
+//			System.err.println("parseAnonymous->" + temp);
 		}
 		if (temp.contains("{key"))
 			return parseString(temp);

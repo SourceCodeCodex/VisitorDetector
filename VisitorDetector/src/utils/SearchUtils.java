@@ -58,7 +58,7 @@ public class SearchUtils {
 							matches.add(arg0);
 						}
 					} catch (Exception e) {
-						System.err.println("String Parser error ->" + element + " : " + e.getMessage());
+//						System.err.println("String Parser error ->" + element + " : " + e.getMessage());
 
 					}
 				}

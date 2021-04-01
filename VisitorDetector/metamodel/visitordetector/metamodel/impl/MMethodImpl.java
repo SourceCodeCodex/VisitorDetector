@@ -1,16 +1,16 @@
 package visitordetector.metamodel.impl;
 
 import visitordetector.metamodel.entity.*;
-import methods.ToString;
 import methods.ParentClassName;
+import methods.ToString;
 import methods.ShowInEditor;
 
 public class MMethodImpl implements MMethod {
 
 	private org.eclipse.jdt.core.IMethod underlyingObj_;
 
-	private static final ToString ToString_INSTANCE = new ToString();
 	private static final ParentClassName ParentClassName_INSTANCE = new ParentClassName();
+	private static final ToString ToString_INSTANCE = new ToString();
 	private static final ShowInEditor ShowInEditor_INSTANCE = new ShowInEditor();
 
 	public MMethodImpl(org.eclipse.jdt.core.IMethod underlyingObj) {
@@ -24,14 +24,14 @@ public class MMethodImpl implements MMethod {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.String toString() {
-		return ToString_INSTANCE.compute(this);
+	public java.lang.String parentClassName() {
+		return ParentClassName_INSTANCE.compute(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.String parentClassName() {
-		return ParentClassName_INSTANCE.compute(this);
+	public java.lang.String toString() {
+		return ToString_INSTANCE.compute(this);
 	}
 
 	@Override

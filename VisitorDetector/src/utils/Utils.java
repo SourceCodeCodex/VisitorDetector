@@ -102,7 +102,7 @@ public class Utils {
 			try {
 				return !Flags.isAbstract(method.getFlags());
 			} catch (JavaModelException e) {
-				System.err.println("removeAbstractMethods->" + method.getElementName());
+//				System.err.println("removeAbstractMethods->" + method.getElementName());
 			}
 			return false;
 		}).collect(Collectors.toList());

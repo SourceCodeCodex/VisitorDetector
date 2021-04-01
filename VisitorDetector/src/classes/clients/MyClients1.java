@@ -100,7 +100,7 @@ public class MyClients1 implements IRelationBuilder<MMethod, MClass> {
 								found.set(true);
 						}
 					} catch (NullPointerException e) {
-						System.err.println("visitCompilationUnit -> " + methodDeclaration.getName() + "-" + e);
+//						System.err.println("visitCompilationUnit -> " + methodDeclaration.getName() + "-" + e);
 					}
 				}
 				return super.visit(methodDeclaration);
@@ -126,7 +126,7 @@ public class MyClients1 implements IRelationBuilder<MMethod, MClass> {
 					return false;
 				}
 			} catch (NullPointerException e) {
-				System.err.println("returnType ->" + returnType);
+//				System.err.println("returnType ->" + returnType);
 			}
 		}
 		List<SingleVariableDeclaration> parameters = method.parameters();
@@ -139,7 +139,7 @@ public class MyClients1 implements IRelationBuilder<MMethod, MClass> {
 					return false;
 				}
 			} catch (NullPointerException e) {
-				System.err.println("paramType ->" + paramType);
+//				System.err.println("paramType ->" + paramType);
 			}
 
 		}
@@ -158,7 +158,7 @@ public class MyClients1 implements IRelationBuilder<MMethod, MClass> {
 								containsStaticReference.set(true);
 						}
 					} catch (NullPointerException e) {
-						System.err.println("qualifiedName ->" + field);
+//						System.err.println("qualifiedName ->" + field);
 					}
 					return super.visit(field);
 				}
@@ -173,7 +173,7 @@ public class MyClients1 implements IRelationBuilder<MMethod, MClass> {
 							containsStaticReference.set(true);
 						}
 					} catch (NullPointerException | JavaModelException e) {
-						System.err.println("methodInvocation ->" + methodInvocation);
+//						System.err.println("methodInvocation ->" + methodInvocation);
 					}
 					return super.visit(methodInvocation);
 				}
@@ -188,7 +188,7 @@ public class MyClients1 implements IRelationBuilder<MMethod, MClass> {
 							containsStaticReference.set(true);
 						}
 					} catch (NullPointerException | JavaModelException e) {
-						System.err.println("methodInvocation ->" + methodInvocation);
+//						System.err.println("methodInvocation ->" + methodInvocation);
 					}
 					return super.visit(methodInvocation);
 				}
@@ -200,7 +200,7 @@ public class MyClients1 implements IRelationBuilder<MMethod, MClass> {
 						if (type != null && SearchUtils.containsType(type.toString(), fullyQualifiedName))
 							containsNonStaticReference.set(true);
 					} catch (NullPointerException e) {
-						System.err.println("castExpression ->" + field);
+//						System.err.println("castExpression ->" + field);
 					}
 					return super.visit(field);
 				}
@@ -217,7 +217,7 @@ public class MyClients1 implements IRelationBuilder<MMethod, MClass> {
 						if (type != null && SearchUtils.containsType(type.toString(), fullyQualifiedName))
 							containsNonStaticReference.set(true);
 					} catch (NullPointerException e) {
-						System.err.println("variableDeclarationStatement ->" + field);
+//						System.err.println("variableDeclarationStatement ->" + field);
 					}
 					return super.visit(field);
 				}
@@ -233,7 +233,7 @@ public class MyClients1 implements IRelationBuilder<MMethod, MClass> {
 						if (type != null && SearchUtils.containsType(type.toString(), fullyQualifiedName))
 							containsNonStaticReference.set(true);
 					} catch (NullPointerException e) {
-						System.err.println("enhancedForStatement ->" + forStatement);
+//						System.err.println("enhancedForStatement ->" + forStatement);
 					}
 					return super.visit(forStatement);
 				}
@@ -248,7 +248,7 @@ public class MyClients1 implements IRelationBuilder<MMethod, MClass> {
 						if (type != null && SearchUtils.containsType(type.toString(), fullyQualifiedName))
 							containsNonStaticReference.set(true);
 					} catch (NullPointerException e) {
-						System.err.println("instanceOfExpression ->" + iExp);
+//						System.err.println("instanceOfExpression ->" + iExp);
 					}
 					return super.visit(iExp);
 				}
