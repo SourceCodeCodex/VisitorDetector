@@ -9,44 +9,13 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import visitordetector.metamodel.entity.MMethod;
 
 public class Utils {
-	public static List<MMethod> removeDuplicates(List<MMethod> methodsWithDuplicates,
-			List<MMethod> methodsWithoutDuplicates) throws JavaModelException {
-		boolean found;
-		for (MMethod methodOne : methodsWithDuplicates) {
-			found = false;
-			for (MMethod methodTwo : methodsWithoutDuplicates) {
-				if (compareMethods(methodOne, methodTwo)) {
-					found = true;
-					break;
-				}
-			}
-			if (!found)
-				methodsWithoutDuplicates.add(methodOne);
-		}
-		return methodsWithoutDuplicates;
-	}
-
-	public static List<IMethod> removeDuplicates(List<IMethod> methodsWithDuplicates) throws JavaModelException {
-		List<IMethod> methodsWithoutDuplicates = new ArrayList<>();
-		boolean found;
-		for (IMethod methodOne : methodsWithDuplicates) {
-			found = false;
-			for (IMethod methodTwo : methodsWithoutDuplicates) {
-				if (compareMethods(methodOne, methodTwo)) {
-					found = true;
-					break;
-				}
-			}
-			if (!found)
-				methodsWithoutDuplicates.add(methodOne);
-		}
-		return methodsWithoutDuplicates;
-	}
-
 	public static boolean compareMethods(IMethod mOne, IMethod mTwo) throws JavaModelException {
 		IType parent1 = (IType) (mOne.getParent());
 		IType parent2 = (IType) (mTwo.getParent());
@@ -102,9 +71,47 @@ public class Utils {
 			try {
 				return !Flags.isAbstract(method.getFlags());
 			} catch (JavaModelException e) {
-//				System.err.println("removeAbstractMethods->" + method.getElementName());
+				// System.err.println("removeAbstractMethods->" + method.getElementName());
 			}
 			return false;
 		}).collect(Collectors.toList());
 	}
+
+	public static boolean isInAInnerMethod(ASTNode node, MethodDeclaration methodSearchingFor) {
+		try {
+			ASTNode astNode = node.getParent();
+			while (astNode.getNodeType() != ASTNode.METHOD_DECLARATION) {
+				astNode = astNode.getParent();
+			}
+			MethodDeclaration parent = (MethodDeclaration) astNode;
+			return !(methodSearchingFor.toString().equals(parent.toString()));
+		} catch (Exception e) {
+			System.err.println("isInAInnerMethod->" + node);
+		}
+		return true;
+	}
+
+	public static boolean visitMethod(IMethod method, Expression expr, IType analyzedType, String fullyQualifiedName)
+			throws JavaModelException {
+		if (Flags.isStatic(method.getFlags()))
+			return false;
+		if (expr == null) {
+			if (getParentFullyQualifiedName(method).equals(analyzedType.getFullyQualifiedName()))
+				return true;
+			return false;
+		}
+		IJavaElement element = expr.resolveTypeBinding().getJavaElement();
+		if (containsType(element.toString(), fullyQualifiedName))
+			return true;
+		return false;
+	}
+
+	public static boolean containsType(String type1Info, String type2Info) {
+		if (!type1Info.contains(type2Info))
+			return false;
+		int pos = type1Info.indexOf(type2Info) + type2Info.length();
+		char ch = type1Info.charAt(pos);
+		return !Character.isLetterOrDigit(ch) && ch != '$';
+	}
+
 }

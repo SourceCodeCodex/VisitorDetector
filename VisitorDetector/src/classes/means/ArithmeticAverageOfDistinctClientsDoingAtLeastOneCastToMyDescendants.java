@@ -11,14 +11,16 @@ import visitordetector.metamodel.entity.MClass;
 import visitordetector.metamodel.entity.MMethod;
 
 @PropertyComputer
-public class ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants2 implements IPropertyComputer<Double, MClass> {
+public class ArithmeticAverageOfDistinctClientsDoingAtLeastOneCastToMyDescendants
+		implements IPropertyComputer<Double, MClass> {
 
 	@Override
 	public Double compute(MClass arg0) {
-		List<MMethod> allClients = arg0.myClients2().getElements();
+		List<MMethod> allClients = arg0.myClientsWithAtLeastOneCastToMyDescendants().getElements();
 		List<Integer> descendantsCasts = new ArrayList<>();
 		CastSearchingUtils csu = new CastSearchingUtils(arg0);
 		allClients.forEach(client -> descendantsCasts.add(csu.getNoOfDescendantsCasts(client.getUnderlyingObject())));
-		return MathUtils.computeArithmeticAverage(descendantsCasts);
+		return MathUtils.computeArithmeticAverage(descendantsCasts, allClients);
 	}
+
 }

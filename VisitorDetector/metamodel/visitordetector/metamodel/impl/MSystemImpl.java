@@ -4,7 +4,6 @@ import visitordetector.metamodel.entity.*;
 import system.NoOfCodeLines;
 import system.NoOfClasses;
 import system.ToString;
-import system.ClassGroupWithAtLeastTwoCastsToTheirDescendants;
 import system.ClassGroupWithPercentageOfClientsDoingCastsAtLeastOne;
 import system.ClassGroup;
 
@@ -15,7 +14,6 @@ public class MSystemImpl implements MSystem {
 	private static final NoOfCodeLines NoOfCodeLines_INSTANCE = new NoOfCodeLines();
 	private static final NoOfClasses NoOfClasses_INSTANCE = new NoOfClasses();
 	private static final ToString ToString_INSTANCE = new ToString();
-	private static final ClassGroupWithAtLeastTwoCastsToTheirDescendants ClassGroupWithAtLeastTwoCastsToTheirDescendants_INSTANCE = new ClassGroupWithAtLeastTwoCastsToTheirDescendants();
 	private static final ClassGroupWithPercentageOfClientsDoingCastsAtLeastOne ClassGroupWithPercentageOfClientsDoingCastsAtLeastOne_INSTANCE = new ClassGroupWithPercentageOfClientsDoingCastsAtLeastOne();
 	private static final ClassGroup ClassGroup_INSTANCE = new ClassGroup();
 
@@ -44,12 +42,6 @@ public class MSystemImpl implements MSystem {
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString() {
 		return ToString_INSTANCE.compute(this);
-	}
-
-	@Override
-	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> classGroupWithAtLeastTwoCastsToTheirDescendants() {
-		return ClassGroupWithAtLeastTwoCastsToTheirDescendants_INSTANCE.buildGroup(this);
 	}
 
 	@Override

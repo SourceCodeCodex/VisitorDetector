@@ -12,16 +12,15 @@ import visitordetector.metamodel.entity.MClass;
 import visitordetector.metamodel.entity.MMethod;
 
 @RelationBuilder
-public class MyClientsWithAtLeastOneCastToMyDescendants2 implements IRelationBuilder<MMethod, MClass> {
+public class MyClientsWithAtLeastOneCastToMyDescendants implements IRelationBuilder<MMethod, MClass> {
 
 	@Override
 	public Group<MMethod> buildGroup(MClass arg0) {
 		Group<MMethod> myClients = new Group<>();
 		CastSearchingUtils csu = new CastSearchingUtils(arg0);
-		List<MMethod> clients = arg0.myClients2().getElements().stream()
+		List<MMethod> clients = arg0.myClients().getElements().stream()
 				.filter(client -> csu.containsDownCast(client.getUnderlyingObject())).collect(Collectors.toList());
 		myClients.addAll(clients);
 		return myClients;
 	}
-
 }

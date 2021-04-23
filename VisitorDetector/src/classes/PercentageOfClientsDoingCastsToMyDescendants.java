@@ -9,11 +9,11 @@ public class PercentageOfClientsDoingCastsToMyDescendants implements IPropertyCo
 
 	@Override
 	public Double compute(MClass arg0) {
-		Integer noOfClients = arg0.myClients3().getElements().size();
-		if (noOfClients == 0)
+		Integer noOfClients = arg0.myClients().getElements().size();
+		if (noOfClients == 0 || noOfClients == 1)
 			return 0.0;
-		Integer noOfClientsWithCasts = arg0.myClientsWithAtLeastOneCastToMyDescendants3().getElements().size();
-		if (noOfClientsWithCasts == 0)
+		Integer noOfClientsWithCasts = arg0.myClientsWithAtLeastOneCastToMyDescendants().getElements().size();
+		if (noOfClientsWithCasts == 0 || noOfClientsWithCasts == 1)
 			return 0.0;
 		return noOfClientsWithCasts * 100.0 / noOfClients;
 	}

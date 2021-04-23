@@ -1,6 +1,5 @@
 package utils;
 
-import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -19,7 +18,6 @@ import org.eclipse.jdt.core.dom.CastExpression;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.Type;
 
 import visitordetector.metamodel.entity.MClass;
@@ -56,15 +54,15 @@ public class CastSearchingUtils {
 				if (!visited.get()) {
 					try {
 						IJavaElement element = methodDeclaration.resolveBinding().getJavaElement();
-						if (element != null
-								&& StringParser.replaceKey(element.toString()).equals(methodSearchingFor.toString())) {
+						IMethod method = (IMethod) element;
+						if (element != null && method.equals(methodSearchingFor)) {
 							boolean result = visitMethodDeclaration(methodDeclaration);
 							visited.set(true);
 							if (result)
 								found.set(true);
 						}
 					} catch (NullPointerException e) {
-//						System.err.println("visitCompilationUnit -> " + e);
+						// System.err.println("visitCompilationUnit -> " + e);
 					}
 				}
 				return super.visit(methodDeclaration);
@@ -73,29 +71,24 @@ public class CastSearchingUtils {
 		return found.get();
 	}
 
-	private boolean visitMethodDeclaration(MethodDeclaration methodDeclaration) {
-		return visitMethodBody(methodDeclaration.getBody());
-	}
-
-	private boolean visitMethodBody(Block methodBody) {
+	public boolean visitMethodDeclaration(MethodDeclaration methodDeclaration) {
+		Block methodBody = methodDeclaration.getBody();
 		if (methodBody == null || methodBody.statements().size() == 0) {
 			return false;
 		}
-		return methodBody.statements().stream().filter(statement -> visitStatement((Statement) statement)).count() > 0;
-	}
-
-	public boolean visitStatement(Statement statement) {
 		AtomicBoolean found = new AtomicBoolean(false);
-		statement.accept(new ASTVisitor() {
+		methodDeclaration.accept(new ASTVisitor() {
 			public boolean visit(CastExpression castExpression) {
-				if (!found.get() && isDescendentOfAnalyzedType(castExpression.getType())) {
+				if (!found.get() && isDescendentOfAnalyzedType(castExpression.getType())
+						&& !Utils.isInAInnerMethod(castExpression, methodDeclaration)) {
 					Expression expr = castExpression.getExpression();
 					try {
-						if (SearchUtils.containsType(expr.resolveTypeBinding().getJavaElement().toString(),
+						if (Utils.containsType(expr.resolveTypeBinding().getJavaElement().toString(),
 								fullyQualifiedName))
 							found.set(true);
 					} catch (NullPointerException e) {
-//						System.err.println("Cast Expression - visitStatement ->" + castExpression.getExpression());
+						// System.err.println("Cast Expression - visitStatement ->" +
+						// castExpression.getExpression());
 					}
 				}
 				return super.visit(castExpression);
@@ -109,7 +102,7 @@ public class CastSearchingUtils {
 			IType iType = (IType) type.resolveBinding().getJavaElement();
 			return descendants.contains(iType.getFullyQualifiedName());
 		} catch (NullPointerException | ClassCastException e) {
-//			System.err.println("isDescendentOfAnalyzedType " + type);
+			// System.err.println("isDescendentOfAnalyzedType " + type);
 		}
 		return false;
 	}
@@ -130,13 +123,13 @@ public class CastSearchingUtils {
 				if (!visited.get()) {
 					try {
 						IJavaElement element = methodDeclaration.resolveBinding().getJavaElement();
-						if (element != null
-								&& StringParser.replaceKey(element.toString()).equals(methodSearchingFor.toString())) {
+						IMethod method = (IMethod) element;
+						if (element != null && method.equals(methodSearchingFor)) {
 							noOfCasts.addAndGet(visitMethodDeclaration2(methodDeclaration));
 							visited.set(true);
 						}
 					} catch (NullPointerException e) {
-//						System.err.println("visitCompilationUnit2 -> " + e);
+						// System.err.println("visitCompilationUnit2 -> " + e);
 					}
 				}
 				return super.visit(methodDeclaration);
@@ -156,17 +149,19 @@ public class CastSearchingUtils {
 				Type type = castExpression.getType();
 				try {
 					IType iType = (IType) type.resolveBinding().getJavaElement();
-					if (isDescendentOfAnalyzedType(type) && !alreadyCounted(iType)) {
+					if (isDescendentOfAnalyzedType(type) && !alreadyCounted(iType)
+							&& !Utils.isInAInnerMethod(castExpression, methodDeclaration)) {
 						Expression expr = castExpression.getExpression();
 
-						if (SearchUtils.containsType(expr.resolveTypeBinding().getJavaElement().toString(),
+						if (Utils.containsType(expr.resolveTypeBinding().getJavaElement().toString(),
 								fullyQualifiedName)) {
 							noOfCasts.incrementAndGet();
 							descendantsWithCasts.add(iType.getFullyQualifiedName());
 						}
 					}
 				} catch (NullPointerException | ClassCastException e) {
-//					System.err.println("Cast Expression - visitStatement ->" + castExpression.getExpression());
+					// System.err.println("Cast Expression - visitStatement ->" +
+					// castExpression.getExpression());
 				}
 				return super.visit(castExpression);
 			}
