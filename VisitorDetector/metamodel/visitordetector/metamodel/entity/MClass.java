@@ -12,13 +12,16 @@ public interface MClass extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.Double medianOfDistinctClientsDoingAtLeastOneCastToMyDescendants();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.String shouldYouUseVisitorForThisType();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants();
+
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.Double medianOfDistinctClientsDoingCastsToMyDescendants();
 
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString();
-
-	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
 	public ro.lrg.xcore.metametamodel.Group<MClass> ascendantsGroup();

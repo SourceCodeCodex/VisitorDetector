@@ -12,10 +12,10 @@ public interface MSystem extends ro.lrg.xcore.metametamodel.XEntity {
 	public java.lang.String toString();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> classGroupWithPercentageOfClientsDoingCastsAtLeastOne();
+	public ro.lrg.xcore.metametamodel.Group<MClass> classGroup();
 
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> classGroup();
+	public ro.lrg.xcore.metametamodel.Group<MClass> typesThatYouShouldUseVisitorFor();
 
 	org.eclipse.jdt.core.IJavaProject getUnderlyingObject();
 }

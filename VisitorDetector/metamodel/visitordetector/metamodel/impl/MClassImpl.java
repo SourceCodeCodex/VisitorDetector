@@ -4,9 +4,10 @@ import visitordetector.metamodel.entity.*;
 import classes.means.ArithmeticAverageOfDistinctClientsDoingAtLeastOneCastToMyDescendants;
 import classes.PercentageOfClientsDoingCastsToMyDescendants;
 import classes.medians.MedianOfDistinctClientsDoingAtLeastOneCastToMyDescendants;
+import classes.ShouldYouUseVisitorForThisType;
+import classes.means.ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants;
 import classes.medians.MedianOfDistinctClientsDoingCastsToMyDescendants;
 import classes.ToString;
-import classes.means.ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants;
 import classes.AscendantsGroup;
 import classes.DescendantsGroup;
 import classes.MethodGroup;
@@ -21,9 +22,10 @@ public class MClassImpl implements MClass {
 	private static final ArithmeticAverageOfDistinctClientsDoingAtLeastOneCastToMyDescendants ArithmeticAverageOfDistinctClientsDoingAtLeastOneCastToMyDescendants_INSTANCE = new ArithmeticAverageOfDistinctClientsDoingAtLeastOneCastToMyDescendants();
 	private static final PercentageOfClientsDoingCastsToMyDescendants PercentageOfClientsDoingCastsToMyDescendants_INSTANCE = new PercentageOfClientsDoingCastsToMyDescendants();
 	private static final MedianOfDistinctClientsDoingAtLeastOneCastToMyDescendants MedianOfDistinctClientsDoingAtLeastOneCastToMyDescendants_INSTANCE = new MedianOfDistinctClientsDoingAtLeastOneCastToMyDescendants();
+	private static final ShouldYouUseVisitorForThisType ShouldYouUseVisitorForThisType_INSTANCE = new ShouldYouUseVisitorForThisType();
+	private static final ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants_INSTANCE = new ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants();
 	private static final MedianOfDistinctClientsDoingCastsToMyDescendants MedianOfDistinctClientsDoingCastsToMyDescendants_INSTANCE = new MedianOfDistinctClientsDoingCastsToMyDescendants();
 	private static final ToString ToString_INSTANCE = new ToString();
-	private static final ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants_INSTANCE = new ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants();
 	private static final AscendantsGroup AscendantsGroup_INSTANCE = new AscendantsGroup();
 	private static final DescendantsGroup DescendantsGroup_INSTANCE = new DescendantsGroup();
 	private static final MethodGroup MethodGroup_INSTANCE = new MethodGroup();
@@ -60,6 +62,18 @@ public class MClassImpl implements MClass {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.String shouldYouUseVisitorForThisType() {
+		return ShouldYouUseVisitorForThisType_INSTANCE.compute(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
+	public java.lang.Double arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants() {
+		return ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants_INSTANCE.compute(this);
+	}
+
+	@Override
+	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.Double medianOfDistinctClientsDoingCastsToMyDescendants() {
 		return MedianOfDistinctClientsDoingCastsToMyDescendants_INSTANCE.compute(this);
 	}
@@ -68,12 +82,6 @@ public class MClassImpl implements MClass {
 	@ro.lrg.xcore.metametamodel.ThisIsAProperty
 	public java.lang.String toString() {
 		return ToString_INSTANCE.compute(this);
-	}
-
-	@Override
-	@ro.lrg.xcore.metametamodel.ThisIsAProperty
-	public java.lang.Double arithmeticAverageOfDistinctClientsDoingCastsToMyDescendants() {
-		return ArithmeticAverageOfDistinctClientsDoingCastsToMyDescendants_INSTANCE.compute(this);
 	}
 
 	@Override

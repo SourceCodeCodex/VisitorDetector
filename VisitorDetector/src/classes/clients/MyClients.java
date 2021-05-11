@@ -56,23 +56,23 @@ public class MyClients implements IRelationBuilder<MMethod, MClass> {
 				ASTParser parser = ASTParser.newParser(AST.JLS10);
 				parser.setKind(ASTParser.K_COMPILATION_UNIT);
 				ICompilationUnit iCUnit = method.getCompilationUnit();
-				if(iCUnit == null ) {
+				if (iCUnit == null) {
 					continue;
 				}
 				parser.setSource(iCUnit);
 				parser.setResolveBindings(true);
 				CompilationUnit cUnit = (CompilationUnit) parser.createAST(null);
-				boolean found = visitCompilationUnit(cUnit, method, arg0.getUnderlyingObject());
+				boolean found = visitCompilationUnit(cUnit, method);
 				if (found)
 					clients.add(Factory.getInstance().createMMethod(method));
 			}
 		} catch (CoreException e) {
-			System.err.println("MMethod - MClass -> MyClientsGroup2:" + e.getMessage());
+			System.err.println("MMethod - MClass -> MyClients:" + e.getMessage());
 		}
 		return clients;
 	}
 
-	private boolean visitCompilationUnit(CompilationUnit cUnit, IMethod methodSearchingFor, IType baseType) {
+	private boolean visitCompilationUnit(CompilationUnit cUnit, IMethod methodSearchingFor) {
 		AtomicBoolean found = new AtomicBoolean(false);
 		AtomicBoolean visited = new AtomicBoolean(false);
 		String methodInfo = methodSearchingFor.toString();
@@ -83,7 +83,7 @@ public class MyClients implements IRelationBuilder<MMethod, MClass> {
 						IJavaElement element = methodDeclaration.resolveBinding().getJavaElement();
 						IMethod method = (IMethod) element;
 						if (element != null && method.equals(methodSearchingFor)) {
-							boolean result = visitMethodBody(methodDeclaration, baseType, methodSearchingFor);
+							boolean result = visitMethodBody(methodDeclaration, methodSearchingFor);
 							visited.set(true);
 							if (result)
 								found.set(true);
@@ -99,7 +99,7 @@ public class MyClients implements IRelationBuilder<MMethod, MClass> {
 		return found.get();
 	}
 
-	private boolean visitMethodBody(MethodDeclaration methodDeclaration, IType baseType, IMethod methodSearchingFor) {
+	private boolean visitMethodBody(MethodDeclaration methodDeclaration, IMethod methodSearchingFor) {
 		Block methodBody = methodDeclaration.getBody();
 		if (methodBody == null || methodBody.statements().size() == 0)
 			return false;
@@ -145,7 +145,7 @@ public class MyClients implements IRelationBuilder<MMethod, MClass> {
 		return found.get();
 	}
 
-	public List<IMethod> getMethods(MClass arg0) throws CoreException {
+	private List<IMethod> getMethods(MClass arg0) throws CoreException {
 		List<IMethod> methods = new ArrayList<>();
 		List<String> fields = new ArrayList<>();
 		SearchPattern pattern = SearchPattern.createPattern(arg0.getUnderlyingObject(),

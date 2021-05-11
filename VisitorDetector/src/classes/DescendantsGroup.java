@@ -32,7 +32,7 @@ public class DescendantsGroup implements IRelationBuilder<MClass, MClass> {
 		return types;
 	}
 
-	public List<IType> getSubtypes(MClass arg0) throws JavaModelException {
+	private List<IType> getSubtypes(MClass arg0) throws JavaModelException {
 		List<IType> types = new LinkedList<>();
 		ITypeHierarchy hierarchy = arg0.getUnderlyingObject().newTypeHierarchy(new NullProgressMonitor());
 		IType[] subtypes = hierarchy.getAllSubtypes(arg0.getUnderlyingObject());

@@ -4,8 +4,8 @@ import visitordetector.metamodel.entity.*;
 import system.NoOfCodeLines;
 import system.NoOfClasses;
 import system.ToString;
-import system.ClassGroupWithPercentageOfClientsDoingCastsAtLeastOne;
 import system.ClassGroup;
+import system.TypesThatYouShouldUseVisitorFor;
 
 public class MSystemImpl implements MSystem {
 
@@ -14,8 +14,8 @@ public class MSystemImpl implements MSystem {
 	private static final NoOfCodeLines NoOfCodeLines_INSTANCE = new NoOfCodeLines();
 	private static final NoOfClasses NoOfClasses_INSTANCE = new NoOfClasses();
 	private static final ToString ToString_INSTANCE = new ToString();
-	private static final ClassGroupWithPercentageOfClientsDoingCastsAtLeastOne ClassGroupWithPercentageOfClientsDoingCastsAtLeastOne_INSTANCE = new ClassGroupWithPercentageOfClientsDoingCastsAtLeastOne();
 	private static final ClassGroup ClassGroup_INSTANCE = new ClassGroup();
+	private static final TypesThatYouShouldUseVisitorFor TypesThatYouShouldUseVisitorFor_INSTANCE = new TypesThatYouShouldUseVisitorFor();
 
 	public MSystemImpl(org.eclipse.jdt.core.IJavaProject underlyingObj) {
 		underlyingObj_ = underlyingObj;
@@ -46,14 +46,14 @@ public class MSystemImpl implements MSystem {
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> classGroupWithPercentageOfClientsDoingCastsAtLeastOne() {
-		return ClassGroupWithPercentageOfClientsDoingCastsAtLeastOne_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MClass> classGroup() {
+		return ClassGroup_INSTANCE.buildGroup(this);
 	}
 
 	@Override
 	@ro.lrg.xcore.metametamodel.ThisIsARelationBuilder
-	public ro.lrg.xcore.metametamodel.Group<MClass> classGroup() {
-		return ClassGroup_INSTANCE.buildGroup(this);
+	public ro.lrg.xcore.metametamodel.Group<MClass> typesThatYouShouldUseVisitorFor() {
+		return TypesThatYouShouldUseVisitorFor_INSTANCE.buildGroup(this);
 	}
 
 	public boolean equals(Object obj) {

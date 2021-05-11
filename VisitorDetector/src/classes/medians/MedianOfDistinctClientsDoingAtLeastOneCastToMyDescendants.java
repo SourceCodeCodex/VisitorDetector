@@ -20,11 +20,6 @@ public class MedianOfDistinctClientsDoingAtLeastOneCastToMyDescendants implement
 		List<Integer> descendantsCasts = new ArrayList<>();
 		CastSearchingUtils csu = new CastSearchingUtils(arg0);
 		allClients.forEach(client -> descendantsCasts.add(csu.getNoOfDescendantsCasts(client.getUnderlyingObject())));
-//		for (int i = 0; i < allClients.size(); i++) {
-//			if (descendantsCasts.get(i) == 0)
-//				System.out.println("What the heck is going with this client->"
-//						+ Utils.getElementName(allClients.get(i).getUnderlyingObject()));
-//		}
 		return MathUtils.computeMedian(descendantsCasts);
 	}
 
